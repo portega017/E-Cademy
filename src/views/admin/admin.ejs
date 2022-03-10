@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title%>
+    </title>
+    <%- include('../partials/head.html'); %>
+
+</head>
+
+<body>
+    <%- include('../partials/navigation.html'); %>
+        <div class="container">
+            <header class="row">
+                <div class="col-lg10 text-center">
+                    <img src="/img/mortarboard.png" class="animated bounceIn" alt="logo">
+
+                </div>
+
+            </header>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="colum col-md-4">
+                    <div class="card">
+                        <div class="card-header  text-center">
+                            <a class="nav-link" id="nav-link_admin" href="/administration/registerTime">Añadir
+                                Horarios</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="colum col-md-4">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <a class="nav-link" id="nav-link_admin" href="/administration/registerStudent">Nuevo Alumno</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="colum col-md-4">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <a class="nav-link" id="nav-link_admin" href="/administration/registerTeacher">Dar de Alta Profesor</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="colum col-md-4">
+                    
+                    <br />
+                    <div class="card">
+                        <div class="card-header  text-center">
+                            <a class="nav-link" id="nav-link_admin" href="/administration/students">Ver Alumnos</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="colum col-md-4">
+                    
+                    <br />
+                    <div class="card">
+                        <div class="card-header  text-center">
+                            <a class="nav-link" id="nav-link_admin" href="/administration/teachers">Ver Profesores</a>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+        <%- include('../partials/footer.html'); %>
+</body>
+
+</html>
