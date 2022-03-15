@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/tablas.css">
+    <title>
+        <%= title%>
+    </title>
+    <%- include('../partials/head.hbs'); %>
+        <style>
+
+        </style>
+</head>
+
+<body>
+    
+    <%- include('../partials/navigation.hbs'); %>
+
+
+        <table border="2px">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>DNI</th>
+                    <th>Dirección</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Acción</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <% if(Alumnos.length!=0){ var i=1; Alumnos.forEach(function(data){ %>
+                    <tr>
+                        <td>
+                            <%= data.Nombre%>
+                        </td>
+                        <td>
+                            <%= data.Apellidos%>
+                        </td>
+                        <td>
+                            <%= data.DNI%>
+                        </td>
+                        <td>
+                            <%= data.Direccion%>
+                        </td>
+                        <td>
+                            <%= data.Correo%>
+                        </td>
+                        <td>
+                            <%= data.Telefono%>
+                        </td>
+                        <td>
+                            <a href="/administration/students" style="color: black;">Editar</a>
+                            <a href="/administration/removeAlumno/<%=data.idAlumno%>"style="color: black;">Dar de Baja</a>
+
+                        </td>
+
+                    </tr>
+                    <% i++; }) %>
+                            <% }else{ %>
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">No Existen Alumnos en la Base de de
+                                        Datos</td>
+                                </tr>
+                                <% } %>
+
+                                   
+
+            </tbody>
+
+        </table>
+        <div class="colum col-md-4 offset-md-4" style="align-items: center;">
+            <div class="card" style="align-items: center;">
+                <div class="card-header text-center" style="align-items: center;">
+                    <a class="nav-link" id="nav-link_admin" href="/administration/registerStudent">Dar de Alta Nuevo Alumno</a>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <%- include('../partials/footer_admin.hbs'); %>
+
+
+</body>
+
+</html>
