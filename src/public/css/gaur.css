@@ -1,0 +1,180 @@
+/******************************** plantilla 1 ***********************/
+/* Redefine estilos de la primera version de gaur.css y define nuevos          */
+/* estilos. Se comentaran todas las clases que redefinan las ya existentes   */
+/* en la primera version de la hoja de estilos.                                                   */
+/*											          */
+/* Fecha ultima modificacion: 23/04/2014				          */
+/* Usuario ultima modificacion: Sergio					          */
+/****************************************************************/
+
+/* INICIO CSS para resetear las propiedades por defecto de las etiquetas basicas (undohtml.css) */
+table,th,td{ margin:0px; padding:0px;}
+
+/* Formato estándar de tabla */
+td {
+	height: 1.2em;
+	text-align: left;
+	padding-left: 0.8em;
+	position: relative;
+	voice-family: "\"}\""; /* Filtro para navegadores que interpretan bien el atributo min-height */
+	voice-family: inherit;
+	min-height: 1.2em;
+	height: auto;
+}
+
+table {
+	width: 100%;
+	border: none;
+}
+
+table thead {
+  	width: 100%;
+}
+
+table thead tr {
+	height: 2em;
+}
+
+table thead tr th {
+	height: 1.2em;
+	background-color: #FFCC99;
+	position: relative;
+	voice-family: "\"}\""; /* Filtro para navegadores que interpretan bien el atributo min-height */
+	voice-family: inherit;
+	min-height: 1.2em;
+	height: auto;
+	text-align: center;
+}
+
+table tbody {
+  	width: 100%;
+}
+
+table tbody tr {
+  	height: 2em; 
+}
+
+table tbody tr td {
+	height: 1.2em;
+	background-color: #FFF8E6;
+	text-align: left;
+	padding-left: 0.8em;
+	position: relative;
+	voice-family: "\"}\""; /* Filtro para navegadores que interpretan bien el atributo min-height */
+	voice-family: inherit;
+	min-height: 1.2em;
+	height: auto;
+}
+
+#calendar table {
+	width: auto;
+}
+
+#calendar table tbody {
+  	width: auto;
+}
+
+#calendar table tbody tr {
+  	height: auto; 
+}
+
+#calendar table tbody tr td {
+	height: auto;
+}
+
+
+
+table thead tr th.conBorde {
+    border: 0.10em dotted;
+}
+table tbody tr.fila {
+    height: 2em;
+}
+table tbody tr th.conBorde {
+    background-color: #ffcc99;
+    position: relative;
+    text-align: center;
+    border: 0.10em dotted;
+}		
+table tbody tr td.conBorde {
+    font-size: 0.84em;
+    border: 0.15em dotted;
+}
+table tbody tr td.conBordeFest {
+    font-size: 0.84em;
+    border: 0.15em dotted;
+    background-color: #f1948a;
+}
+
+
+/* Formato estándar de tabla */
+td {
+	height: 1.2em;
+	text-align: left;
+	padding-left: 0.8em;
+	position: relative;
+	voice-family: "\"}\""; /* Filtro para navegadores que interpretan bien el atributo min-height */
+	voice-family: inherit;
+	min-height: 1.2em;
+	height: auto;
+}
+
+table {
+	width: 100%;
+	border: none;
+}
+
+table thead {
+  	width: 100%;
+}
+
+table thead tr {
+	height: 2em;
+}
+
+table thead tr th {
+	height: 1.2em;
+	background-color: #FFCC99;
+	position: relative;
+	voice-family: "\"}\""; /* Filtro para navegadores que interpretan bien el atributo min-height */
+	voice-family: inherit;
+	min-height: 1.2em;
+	height: auto;
+	text-align: center;
+}
+
+table tbody {
+  	width: 100%;
+}
+
+table tbody tr {
+  	height: 2em; 
+}
+
+table tbody tr td {
+	height: 1.2em;
+	background-color: #FFF8E6;
+	text-align: left;
+	padding-left: 0.8em;
+	position: relative;
+	voice-family: "\"}\""; /* Filtro para navegadores que interpretan bien el atributo min-height */
+	voice-family: inherit;
+	min-height: 1.2em;
+	height: auto;
+}
+
+#calendar table {
+	width: auto;
+}
+
+#calendar table tbody {
+  	width: auto;
+}
+
+#calendar table tbody tr {
+  	height: auto; 
+}
+
+#calendar table tbody tr td {
+	height: auto;
+}

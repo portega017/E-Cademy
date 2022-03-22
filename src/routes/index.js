@@ -4,29 +4,33 @@ const router = express.Router();
 
 
 
-router.get('/', (req,res)=>{
+router.get('/', (req, res) => {
 
-    res.render('index.hbs', {title: 'E-cademy'});
+    res.render('index.hbs', { title: 'E-cademy' });
 });
 
-router.get('/contact', (req,res)=>{
+router.get('/contact', (req, res) => {
 
-    res.render('contact.hbs', {title: 'Contact Page'});
+    res.render('contact.hbs', { title: 'Contact Page' });
 });
 
 
 
-router.get('/login', function(req, res) {
-	// Render login template
-	res.render( 'login.hbs',{title: 'Login'});
+router.get('/login', function (req, res) {
+    // Render login template
+    res.render('login.hbs', { title: 'Login' });
 });
-router.get('/register', (req,res)=>{
-    res.render('register',{title:'SignUp'});
+router.get('/register', (req, res) => {
+    res.render('register', { title: 'SignUp' });
 })
-router.get('/dashboard',(req,res)=>{
-    res.render('index.html', {title: 'E-cademy'});
-    })
+router.get('/dashboard', (req, res) => {
+    res.render('index.html', { title: 'E-cademy' });
+})
 
+router.get('/horario', (req, res, next) => {
 
+    res.render('horario', { title: 'Alumnos' });
 
-module.exports=router;
+});
+
+module.exports = router;
