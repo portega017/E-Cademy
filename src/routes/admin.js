@@ -72,7 +72,32 @@ router.get('/editarAlumno/:id', (req, res, next) => {
 
 });
 
+router.get('/edit/:id', function(req, res, next) {
+  var idAlumno= req.params.id;
+  var sql=`SELECT * FROM Alumno WHERE idAlumno=${idAlumno}`;
+  db.query(sql, function (err, data) {
+    if (err) throw err;
+   
+    res.render('users-form', { title: 'User List', editData: data[0]});
+  });
+});
 
+router.post('/edit/:id',(req,res,next)=>{
+  const userDetails = req.body;
+
+  // insert user data into users table
+  var id = req.params.id;
+  var sql = 'UPDATE Alumno SET = ? WHERE idAlumno = ?';
+  db.query(sql, [userDetails,id], function (err, data) {
+    if (err) {
+      return res.status(500).send(err) // <-- add return
+    } else {
+      console.log("Alumno Modificado");
+      return res.redirect('/administration/students');  // redirect to user form page after inserting the data
+      // <-- add returnƒ
+    }
+  });
+});
 
 router.get('/removeAlumno/:id', (req, res, next) => {
 

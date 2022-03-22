@@ -37,26 +37,26 @@
 
                 <% if(Alumnos.length!=0){ var i=1; Alumnos.forEach(function(data){ %>
                     <tr>
-                        <td>
+                        <td contentEditable="true">
                             <%= data.Nombre%>
                         </td>
-                        <td>
+                        <td contentEditable="true">
                             <%= data.Apellidos%>
                         </td>
-                        <td>
+                        <td contentEditable="true"> 
                             <%= data.DNI%>
                         </td>
-                        <td>
+                        <td contentEditable="true">
                             <%= data.Direccion%>
                         </td>
-                        <td>
+                        <td contentEditable="true">
                             <%= data.Correo%>
                         </td>
-                        <td>
+                        <td contentEditable="true">
                             <%= data.Telefono%>
                         </td>
                         <td>
-                            <a href="/administration/students" style="color: black;">Editar</a>
+                            <a href="/administration/edit/<%=data.idAlumno%>" style="color: black;">Editar</a>
                             <a href="/administration/removeAlumno/<%=data.idAlumno%>"style="color: black;">Dar de Baja</a>
 
                         </td>

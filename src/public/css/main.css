@@ -1,85 +1,105 @@
 body {
-    background: #005C97;
-    /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #363795, #005C97);
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #363795, #005C97);
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-} 
+  background: #005C97;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #363795, #005C97);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #363795, #005C97);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+width: 100%;
+}
 
 .navbar-brand {
-    font-family: 'Spicy Rice', cursive;
-    font-size: 1.5rem;
-  }
-  
-  .nav-link {
-    text-transform: uppercase;
-    font-family: 'Spicy Rice', cursive;
-  }
-  
-  #nav-link_admin {
-    text-transform: uppercase;
-    font-family: 'Verdana', cursive;
-  }
-#pie{
-    text-align: right;
-    position: center;
-    bottom: 0;
-    width: 100%;
-  }
+  font-family: 'Spicy Rice', cursive;
+  font-size: 1.5rem;
+}
 
-  .login {
-    width: 400px;
-    background-color: #ffffff;
-    box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
-    margin: 100px auto;
+
+
+.nav-link {
+  text-transform: uppercase;
+  font-family: 'Spicy Rice', cursive;
 }
+
+#nav-link_admin {
+  text-transform: uppercase;
+  font-family: 'Verdana', cursive;
+}
+
+#pie {
+  text-align: right;
+  position: center;
+  bottom: 0;
+  width: 100%;
+}
+
+#footer {
+  text-align: right;
+  position: center;
+  position: fixed;
+  bottom: 0;
+  padding: 10px 10px 0px 10px;
+  width: 100%;
+  /* Height of the footer */
+  /*background:#6cf;*/
+}
+
+.login {
+  width: 400px;
+  background-color: #ffffff;
+  box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
+  margin: 100px auto;
+}
+
 .login h1 {
-    text-align: center;
-    color: #5b6574;
-    font-size: 24px;
-    padding: 20px 0 20px 0;
-    border-bottom: 1px solid #dee0e4;
+  text-align: center;
+  color: #5b6574;
+  font-size: 24px;
+  padding: 20px 0 20px 0;
+  border-bottom: 1px solid #dee0e4;
 }
+
 .login form {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 20px;
 }
+
 .login form label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    background-color: #3274d6;
-    color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #3274d6;
+  color: #ffffff;
 }
+
 .login form input[type="password"], .login form input[type="text"] {
-    width: 310px;
-    height: 50px;
-    border: 1px solid #dee0e4;
-    margin-bottom: 20px;
-    padding: 0 15px;
+  width: 310px;
+  height: 50px;
+  border: 1px solid #dee0e4;
+  margin-bottom: 20px;
+  padding: 0 15px;
 }
+
 .login form input[type="submit"] {
-    width: 100%;
-    padding: 15px;
-   margin-top: 20px;
-    background-color: #3274d6;
-    border: 0;
-    cursor: pointer;
-    font-weight: bold;
-    color: #ffffff;
-    transition: background-color 0.2s;
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  background-color: #3274d6;
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+  transition: background-color 0.2s;
 }
+
 .login form input[type="submit"]:hover {
   background-color: #2868c7;
-    transition: background-color 0.2s;
+  transition: background-color 0.2s;
 }
 
- /*header img {
+/*header img {
     width: 60%;
   }*/
