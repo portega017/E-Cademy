@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="/css/tablas.css">
+
+{{#if Profesor}}
+
+<table border="2px">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>DNI</th>
+            <th>Dirección</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Acción</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Profesor}}
+        <tr>
+            <td contentEditable="true">
+                {{Nombre}}
+            </td>
+            <td contentEditable="true">
+                {{Apellidos}}
+            </td>
+            <td contentEditable="true">
+                {{DNI}}
+            </td>
+            <td contentEditable="true">
+                {{Dirección}}
+            </td>
+            <td contentEditable="true">
+                {{Email}}
+            </td>
+            <td contentEditable="true">
+                {{Telefono}}
+            </td>
+            <td>
+                <a href="/administration/editProfesor/{{idProfesor}}" style="color: black;">Editar</a>
+                <a href="/administration/deleteProfesor/{{idProfesor}}" style="color: black;">Dar de Baja</a>
+
+            </td>
+
+        </tr>
+    </tbody>
+
+
+    {{/each}}
+</table>
+<div class="colum col-md-4 offset-md-4 mx-auto p-4" style="align-items: center;">
+    <div class="card" style="align-items: center;">
+        <div class="card-header text-center" style="align-items: center;">
+            <a class="nav-link" id="nav-link_admin" href="/administration/registerTeacher">Dar de Alta Nuevo
+                Profesor</a>
+        </div>
+    </div>
+</div>
+{{else}}
+<!--mitico else-->
+<div class="col-md-4 mx-auto p-4">
+    <div class="card cardbody text-center">
+        <p>No hay Profesores registrados aún.</p>
+        <a class="nav-link" id="nav-link_admin" href="/administration/registerTeacher">Dar de Alta Nuevo Profesor</a>
+
+
+    </div>
+</div>
+{{/if}}

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../database');
+const pool = require('../database');
 
 /* GET users listing. */
 
@@ -12,110 +12,77 @@ router.get('/', (req, res) => {
 
 
 
-router.get('/registerTime', function (req, res, next) {
+router.get('/registerTime', (req, res, next) => {
   res.render('admin/altaHorario.hbs', { title: 'Nuevo Horario' });
 });
 
 
 //ALUMNOS
-router.get('/registerStudent', function (req, res, next) {
+router.get('/registerStudent', async (req, res, next) => {
   res.render('admin/altaAlumno.hbs', { title: 'Nuevo Alumno' });
 });
 
 
-router.get('/students', (req, res, next) => {
-  db.query('SELECT * FROM Alumno', (err, data, fields) => {
-    if (err) throw err;
-    res.render('admin/showAlumnos.ejs', { title: 'Alumnos', Alumnos: data });
-  });
+router.get('/students', async (req, res, next) => {
+  const Alumno = await pool.query('SELECT * FROM Alumno');
+
+  res.render('admin/showAlumnos.hbs', { title: 'Alumnos', Alumno: Alumno });
+
 });
 
-router.post('/addAlumno', function (req, res, next) {
+router.post('/addAlumno', async (req, res) => { //async es necesario para el await
+  const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo } = req.body;
+  const newStudent = {
+    Nombre,
+    Apellidos,
+    DNI,
+    Direccion,
+    Telefono,
+    Correo
+  };
+  const Alumno = await pool.query('SELECT * FROM Alumno WHERE DNI = ?', [newStudent.DNI]);
+  console.log(Alumno.length)
+  if (Alumno.length == 0) {
+    await pool.query('INSERT INTO Alumno SET ?', [newStudent]);//await= me tomo mi tiempo y luego continuo con la ejecución
+    req.flash('success', 'Alumno registrado correctamente.');
+  } else {
+    req.flash('success', 'El alumno ya existe.');
+  }
+  res.redirect("/administration/students");
+});
 
-  // store all the user input data
-  const userDetails = req.body;
+router.get('/deleteAlumno/:id', async (req, res) => {
+  const { id } = req.params;
+  await pool.query('DELETE FROM Alumno WHERE idAlumno = ?', [id]);
+  req.flash('success', 'Alumno eliminado correctamente');
 
-  // insert user data into users table
-  var sql = 'INSERT INTO Alumno SET ?';
-
-
-
-
-  db.query("SELECT DNI FROM Alumno WHERE DNI = ?", [userDetails.DNI], function (err, result) {
-    if (err) {
-      return res.status(500).send(err) // <-- add return
-    } else {
-      if (result.length === 0) {
-        //new user logic
-        db.query(sql, userDetails, function (err, data) {
-          if (err) {
-            return res.status(500).send(err) // <-- add return
-          } else {
-            console.log("Alumno grabado correctamente ");
-
-            return res.render('admin/altaAlumno.hbs', { title: 'Nuevo Alumno' });  // redirect to user form page after inserting the data
-            // <-- add return
-          }
-        });
-      } else {
-        //existing user, redirect to another page 
-        res.redirect('/administration/students');
-
-      }
-    }
-  });
+  res.redirect('/administration/students');
 
 });
 
 
-router.get('/editarAlumno/:id', (req, res, next) => {
+router.get('/editAlumno/:id', async (req, res) => {
+  const { id } = req.params;
+  const Alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
+  res.render('admin/editAlumno', { Alumno: Alumno[0] })
 
 });
 
-router.get('/edit/:id', function(req, res, next) {
-  var idAlumno= req.params.id;
-  var sql=`SELECT * FROM Alumno WHERE idAlumno=${idAlumno}`;
-  db.query(sql, function (err, data) {
-    if (err) throw err;
-   
-    res.render('users-form', { title: 'User List', editData: data[0]});
-  });
-});
+router.post('/editAlumno/:id', async (req, res) => {
+  const { id } = req.params;
+  const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo } = req.body;
+  const newAlumno = {
+    Nombre,
+    Apellidos,
+    DNI,
+    Direccion,
+    Telefono,
+    Correo
+  };
+  await pool.query('UPDATE Alumno SET ? WHERE idAlumno = ?', [newAlumno, id]);
+  req.flash('success', 'Alumno editado correctamente');
 
-router.post('/edit/:id',(req,res,next)=>{
-  const userDetails = req.body;
-
-  // insert user data into users table
-  var id = req.params.id;
-  var sql = 'UPDATE Alumno SET = ? WHERE idAlumno = ?';
-  db.query(sql, [userDetails,id], function (err, data) {
-    if (err) {
-      return res.status(500).send(err) // <-- add return
-    } else {
-      console.log("Alumno Modificado");
-      return res.redirect('/administration/students');  // redirect to user form page after inserting the data
-      // <-- add returnƒ
-    }
-  });
-});
-
-router.get('/removeAlumno/:id', (req, res, next) => {
-
-  // store all the user input data
-  const userDetails = req.body;
-
-  // insert user data into users table
-  var id = req.params.id;
-  var sql = 'DELETE FROM Alumno WHERE idAlumno = ?';
-  db.query(sql, [id], function (err, data) {
-    if (err) {
-      return res.status(500).send(err) // <-- add return
-    } else {
-      console.log("Alumno Eliminado");
-      return res.redirect('/administration/students');  // redirect to user form page after inserting the data
-      // <-- add returnƒ
-    }
-  });
+  res.redirect('/administration/students')
 });
 
 
@@ -126,71 +93,73 @@ router.get('/removeAlumno/:id', (req, res, next) => {
 
 
 //Profesores
-router.get('/registerTeacher', function (req, res, next) {
+router.get('/registerTeacher', async (req, res, next) => {
   res.render('admin/altaProfesor.hbs', { title: 'Nuevo Profesor' });
 });
 
-router.get('/teachers', (req, res, next) => {
-  db.query('SELECT * FROM Profesor', (err, data, fields) => {
-    if (err) throw err;
-    res.render('admin/showProfesores.ejs', { title: 'Profesores', Profesores: data });
-  });
-});
+router.get('/teachers', async (req, res, next) => {
+  const Profesor = await pool.query('SELECT * FROM Profesor');
 
-router.get('/removeProfesor/:id', (req, res, next) => {
-
-  // store all the user input data
-  const userDetails = req.body;
-
-  // insert user data into users table
-  var id = req.params.id;
-  var sql = 'DELETE FROM Profesor WHERE idProfesor = ?';
-  db.query(sql, [id], function (err, data) {
-    if (err) {
-      return res.status(500).send(err) // <-- add return
-    } else {
-      console.log("Profesor Eliminado");
-      return res.redirect('/administration/teachers');  // redirect to user form page after inserting the data
-      // <-- add returnƒ
-    }
-  });
-});
-
-
-router.post('/addProfesor', function (req, res, next) {
-
-  // store all the user input data
-  const userDetails = req.body;
-
-  // insert user data into users table
-  var sql = 'INSERT INTO Profesor SET ?';
-
-
-
-
-  db.query("SELECT DNI FROM Profesor WHERE DNI = ?", [userDetails.DNI], function (err, result) {
-    if (err) {
-      return res.status(500).send(err) // <-- add return
-    } else {
-      if (result.length === 0) {
-        //new user logic
-        db.query(sql, userDetails, function (err, data) {
-          if (err) {
-            return res.status(500).send(err) // <-- add return
-          } else {
-            console.log("Profesor grabado correctamente ");
-
-            return res.render('admin/altaProfesor.hbs', { title: 'Nuevo Profesor' });  // redirect to user form page after inserting the data
-            // <-- add return
-          }
-        });
-      } else {
-        //existing user, redirect to another page 
-        res.redirect('/administration/teachers');
-
-      }
-    }
-  });
+  res.render('admin/showProfesores.hbs', { title: 'Profesores', Profesor: Profesor });
 
 });
+
+router.get('/deleteProfesor/:id', async (req, res) => {
+  const { id } = req.params;
+  await pool.query('DELETE FROM Profesor WHERE idProfesor = ?', [id]);
+  req.flash('success', 'Profesor eliminado correctamente');
+
+  res.redirect('/administration/teachers');
+
+})
+
+
+router.post('/addProfesor', async (req, res) => { //async es necesario para el await
+  const { Nombre, Apellidos, DNI, Dirección, Telefono, Email } = req.body;
+  const newTeacher = {
+    Nombre,
+    Apellidos,
+    DNI,
+    Dirección,
+    Telefono,
+    Email
+  };
+  const Teacher = await pool.query('SELECT * FROM Profesor WHERE DNI = ?', [newTeacher.DNI]);
+  console.log(Teacher.length)
+  if (Teacher.length == 0) {
+    await pool.query('INSERT INTO Profesor SET ?', [newTeacher]);//await= me tomo mi tiempo y luego continuo con la ejecución
+    req.flash('success', 'Profesor registrado correctamente.');
+  } else {
+    req.flash('success', 'El profesor ya existe.');
+  }
+  res.redirect("/administration/teachers");
+});
+
+
+
+router.get('/editProfesor/:id', async (req, res) => {
+  const { id } = req.params;
+  const Profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [id]);
+  res.render('admin/editProfesor', { Profesor: Profesor[0] })
+
+});
+
+router.post('/editProfesor/:id', async (req, res) => {
+  const { id } = req.params;
+  const { Nombre, Apellidos, DNI, Dirección, Telefono, Email } = req.body;
+  const newProfesor = {
+    Nombre,
+    Apellidos,
+    DNI,
+    Dirección,
+    Telefono,
+    Email
+  };
+  await pool.query('UPDATE Profesor SET ? WHERE idProfesor = ?', [newProfesor, id]);
+  req.flash('success', 'Profesor editado correctamente');
+
+  res.redirect('/administration/teachers')
+});
+
+
 module.exports = router;

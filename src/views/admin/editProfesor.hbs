@@ -1,0 +1,42 @@
+<div class="container p-5">
+            <div class="row">
+                <div class="col-md-5 offset-md-4">
+                    <div class="card" class="animated flipInY">
+                        <div class="card-header bg-dark text-white text-center">
+                            <h3>Editar Profesor</h3>
+                        </div>
+                        <div class="card-body">
+                            <form action="/administration/editProfesor/{{Profesor.idProfesor}}" id="alta" method="POST" >
+                                <div class="form-group">
+                                    <input type="text" value="{{Profesor.Nombre}}" class="form-control" placeholder="Nombre" name="Nombre" required="true">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" value="{{Profesor.Apellidos}}"class="form-control" placeholder="Apellidos" name="Apellidos" required="true">
+                                </div>
+                               <div class="form-group">
+                                    <input type="text" value="{{Profesor.DNI}}" class="form-control" placeholder="DNI" name="DNI" required="true">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" value="{{Profesor.Dirección}}" class="form-control" placeholder="Dirección" name="Dirección" required="true">
+                                </div>
+                               
+                                <div class="form-group">
+                                    <input type="number" value="{{Profesor.Telefono}}" class="form-control" placeholder="Teléfono" name="Telefono" required="true">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" value="{{Profesor.Email}}" class="form-control" placeholder="Email" name="Email" required="true">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block">
+                                        Enviar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    {{>footer_admin}}
