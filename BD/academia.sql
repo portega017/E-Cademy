@@ -1,0 +1,244 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema academia
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `academia` ;
+
+-- -----------------------------------------------------
+-- Schema academia
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `academia` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `academia` ;
+
+-- -----------------------------------------------------
+-- Table `academia`.`Alumno`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Alumno` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Alumno` (
+  `idAlumno` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Apellidos` VARCHAR(45) NOT NULL,
+  `Direccion` VARCHAR(45) NOT NULL,
+  `Correo` VARCHAR(45) NOT NULL,
+  `Telefono` VARCHAR(45) NOT NULL,
+  `DNI` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idAlumno`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 17
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`Asignatura`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Asignatura` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Asignatura` (
+  `idAsignatura` INT NOT NULL AUTO_INCREMENT,
+  `Codigo` VARCHAR(45) NOT NULL,
+  `Nombre` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idAsignatura`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`Grupo`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Grupo` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Grupo` (
+  `idGrupo` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Capacidad` VARCHAR(45) NOT NULL,
+  `Turno` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idGrupo`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`Aula`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Aula` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Aula` (
+  `idAula` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Grupo_idGrupo` INT NOT NULL,
+  PRIMARY KEY (`idAula`),
+  INDEX `fk_Aula_Grupo1_idx` (`Grupo_idGrupo` ASC) VISIBLE,
+  CONSTRAINT `fk_Aula_Grupo1`
+    FOREIGN KEY (`Grupo_idGrupo`)
+    REFERENCES `academia`.`Grupo` (`idGrupo`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`Horario_Alumno`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Horario_Alumno` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Horario_Alumno` (
+  `idHorario_Alumno` INT NOT NULL AUTO_INCREMENT,
+  `idAsignatura` INT NOT NULL,
+  `idAlumno` INT NOT NULL,
+  `Dia` VARCHAR(45) NOT NULL,
+  `Hora_inicio` TIME NOT NULL,
+  `Hora_fin` TIME NOT NULL,
+  PRIMARY KEY (`idHorario_Alumno`),
+  INDEX `fk_Horario_Alumno_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
+  INDEX `fk_Horario_Alumno_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
+  CONSTRAINT `fk_Horario_Alumno_Alumno1`
+    FOREIGN KEY (`idAlumno`)
+    REFERENCES `academia`.`Alumno` (`idAlumno`),
+  CONSTRAINT `fk_Horario_Alumno_Asignatura1`
+    FOREIGN KEY (`idAsignatura`)
+    REFERENCES `academia`.`Asignatura` (`idAsignatura`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`Pagos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Pagos` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Pagos` (
+  `idPagos` INT NOT NULL AUTO_INCREMENT,
+  `concepto` VARCHAR(45) NOT NULL,
+  `importe` DOUBLE NOT NULL,
+  `fecha_pago` DATETIME NOT NULL,
+  `Alumno_idAlumno` INT NOT NULL,
+  PRIMARY KEY (`idPagos`),
+  INDEX `fk_Pagos_Alumno1_idx` (`Alumno_idAlumno` ASC) VISIBLE,
+  CONSTRAINT `fk_Pagos_Alumno1`
+    FOREIGN KEY (`Alumno_idAlumno`)
+    REFERENCES `academia`.`Alumno` (`idAlumno`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`Profesor`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Profesor` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
+  `idProfesor` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Apellidos` VARCHAR(45) NOT NULL,
+  `Dirección` VARCHAR(45) NOT NULL,
+  `Telefono` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(45) NOT NULL,
+  `DNI` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idProfesor`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`UsuarioAl`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`UsuarioAl` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`UsuarioAl` (
+  `idUsuarioAl` INT NOT NULL AUTO_INCREMENT,
+  `NomUser` VARCHAR(45) NOT NULL,
+  `Passw` VARCHAR(45) NOT NULL,
+  `idAlumno` INT NOT NULL,
+  PRIMARY KEY (`idUsuarioAl`),
+  INDEX `fk_UsuarioAl_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
+  CONSTRAINT `fk_UsuarioAl_Alumno1`
+    FOREIGN KEY (`idAlumno`)
+    REFERENCES `academia`.`Alumno` (`idAlumno`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`UsuarioProf`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`UsuarioProf` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`UsuarioProf` (
+  `idUsuarioProf` INT NOT NULL AUTO_INCREMENT,
+  `NomUser` VARCHAR(45) NOT NULL,
+  `Passw` VARCHAR(45) NOT NULL,
+  `idProfesor` INT NOT NULL,
+  PRIMARY KEY (`idUsuarioProf`),
+  INDEX `fk_UsuarioProf_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
+  CONSTRAINT `fk_UsuarioProf_Profesor1`
+    FOREIGN KEY (`idProfesor`)
+    REFERENCES `academia`.`Profesor` (`idProfesor`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`horario_profesor`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`horario_profesor` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`horario_profesor` (
+  `idProfesor` INT NOT NULL,
+  `idAsignatura` INT NOT NULL,
+  `Dia` VARCHAR(45) NOT NULL,
+  `hora_inicio` TIME NOT NULL,
+  `hora_fin` TIME NOT NULL,
+  `Grupo_idGrupo` INT NOT NULL,
+  INDEX `fk_horario_profesor_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
+  INDEX `fk_horario_profesor_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
+  INDEX `fk_horario_profesor_Grupo1_idx` (`Grupo_idGrupo` ASC) VISIBLE,
+  CONSTRAINT `fk_horario_profesor_Asignatura1`
+    FOREIGN KEY (`idAsignatura`)
+    REFERENCES `academia`.`Asignatura` (`idAsignatura`),
+  CONSTRAINT `fk_horario_profesor_Grupo1`
+    FOREIGN KEY (`Grupo_idGrupo`)
+    REFERENCES `academia`.`Grupo` (`idGrupo`),
+  CONSTRAINT `fk_horario_profesor_Profesor1`
+    FOREIGN KEY (`idProfesor`)
+    REFERENCES `academia`.`Profesor` (`idProfesor`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `academia`.`users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`users` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`users` (
+  `idusers` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(60) NOT NULL,
+  `DNI` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idusers`))
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
