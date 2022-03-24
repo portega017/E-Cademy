@@ -10,12 +10,17 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const MySQLStore=require('express-mysql-session')
 const {database}=require('./keys');
+const passport = require('passport');
 //inicializaciones
 
 const app = express();
+require('./lib/passport');
+
 var adminRouter = require('./routes/admin');
 var profRouter = require('./routes/profesor');
 var userRouter=require('./routes/users');
+
+
 //settings
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -45,10 +50,15 @@ app.use(cors());
 app.use(fileupload());
 app.use(flash());
 
+app.use(passport.initialize()); //para iniciar passport
+app.use(passport.session());
+
+
 //variables globales
 app.use((req,res,next)=>{
     app.locals.message = req.flash('message');
     app.locals.success = req.flash('success');
+    app.locals.user = req.user;
 
     next();
 });

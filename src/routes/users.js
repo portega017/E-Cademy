@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require('../database')
 
 router.get('/register', (req, res) => {
-    res.render('register', { title: 'SignUp' });
+    res.render('auth/signup', { title: 'SignUp' });
 })
 router.get('/login', (req, res) => {
-    res.render('login', { title: 'SignIn' });
+    res.render('auth/signin', { title: 'SignIn' });
 })
 
 router.post('/register', (req, res) => {
