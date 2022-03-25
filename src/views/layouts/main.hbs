@@ -27,12 +27,15 @@
         {{{title}}}
     </title>
 
-    
+
 </head>
 
 <body>
-
-   {{>navigation}}
+    {{#if user}}
+    {{>navigation_profile}}
+    {{else}}
+    {{>navigation}}
+    {{/if}}
     {{>message}}
 
     <!--para los partials-->
