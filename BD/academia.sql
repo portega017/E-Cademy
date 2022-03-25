@@ -226,6 +226,18 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `academia`.`user_roles`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`user_roles` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`user_roles` (
+  `id_rol` INT NOT NULL AUTO_INCREMENT,
+  `rol` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_rol`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `academia`.`users`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `academia`.`users` ;
@@ -235,10 +247,22 @@ CREATE TABLE IF NOT EXISTS `academia`.`users` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(60) NOT NULL,
   `DNI` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idusers`))
+  `fullname` VARCHAR(45) NOT NULL,
+  `id_rol` INT NOT NULL,
+  PRIMARY KEY (`idusers`),
+  INDEX `fk_users_user_roles1_idx` (`id_rol` ASC) VISIBLE,
+  CONSTRAINT `fk_users_user_roles1`
+    FOREIGN KEY (`id_rol`)
+    REFERENCES `academia`.`user_roles` (`id_rol`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+insert into user_roles (id_rol, rol) values (1, 'admin');
+insert into user_roles (id_rol, rol) values (2, 'profesor');
+insert into user_roles (id_rol, rol) values (3, 'alumno');
+insert into users (idusers, username, password, DNI, id_rol, fullname) values (1, 'pibol','$2a$10$dEJbgghoPtfqlEC48mJNmuQZXR.vSn5HZgZD9wkWzHpZUTGA6LY2i', '16094053X', 1, 'Pablo');
