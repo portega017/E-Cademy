@@ -10,9 +10,11 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/"><i class="fas fa-home"></i> Home</a>
         </li>
+        {{#compare user.id_rol '==' 1}}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/administration"><i class="fas fa-user"></i> Admin</a>
         </li>
+        {{/compare}}
         <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>

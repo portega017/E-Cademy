@@ -23,6 +23,8 @@
     "form-data": "^4.0.0",
     "formidable": "^2.0.1",
     "fs": "*",
+    "handlebars-utils": "^1.0.6",
+    "has-value": "^2.0.2",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
