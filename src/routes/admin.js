@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../database');
+const { isLoggedIn } = require('../lib/auth');
+const { isAdmin } = require('../lib/auth');
+
 
 /* GET users listing. */
 
-router.get('/', (req, res) => {
+router.get('/', isLoggedIn, isAdmin, (req, res) => {
 
   res.render('admin/admin.hbs', { title: 'Administración' });
 });
@@ -12,25 +15,25 @@ router.get('/', (req, res) => {
 
 
 
-router.get('/registerTime', (req, res, next) => {
+router.get('/registerTime', isLoggedIn, isAdmin, (req, res, next) => {
   res.render('admin/altaHorario.hbs', { title: 'Nuevo Horario' });
 });
 
 
 //ALUMNOS
-router.get('/registerStudent', async (req, res, next) => {
+router.get('/registerStudent', isLoggedIn, isAdmin, async (req, res, next) => {
   res.render('admin/altaAlumno.hbs', { title: 'Nuevo Alumno' });
 });
 
 
-router.get('/students', async (req, res, next) => {
+router.get('/students', isLoggedIn, isAdmin, async (req, res, next) => {
   const Alumno = await pool.query('SELECT * FROM Alumno');
 
   res.render('admin/showAlumnos.hbs', { title: 'Alumnos', Alumno: Alumno });
 
 });
 
-router.post('/addAlumno', async (req, res) => { //async es necesario para el await
+router.post('/addAlumno', isLoggedIn, isAdmin, async (req, res) => { //async es necesario para el await
   const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo } = req.body;
   const newStudent = {
     Nombre,
@@ -51,7 +54,7 @@ router.post('/addAlumno', async (req, res) => { //async es necesario para el awa
   res.redirect("/administration/students");
 });
 
-router.get('/deleteAlumno/:id', async (req, res) => {
+router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM Alumno WHERE idAlumno = ?', [id]);
   req.flash('success', 'Alumno eliminado correctamente');
@@ -61,14 +64,14 @@ router.get('/deleteAlumno/:id', async (req, res) => {
 });
 
 
-router.get('/editAlumno/:id', async (req, res) => {
+router.get('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
   res.render('admin/editAlumno', { Alumno: Alumno[0] })
 
 });
 
-router.post('/editAlumno/:id', async (req, res) => {
+router.post('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo } = req.body;
   const newAlumno = {
@@ -93,18 +96,18 @@ router.post('/editAlumno/:id', async (req, res) => {
 
 
 //Profesores
-router.get('/registerTeacher', async (req, res, next) => {
+router.get('/registerTeacher', isLoggedIn, isAdmin, async (req, res, next) => {
   res.render('admin/altaProfesor.hbs', { title: 'Nuevo Profesor' });
 });
 
-router.get('/teachers', async (req, res, next) => {
+router.get('/teachers', isLoggedIn, isAdmin, async (req, res, next) => {
   const Profesor = await pool.query('SELECT * FROM Profesor');
 
   res.render('admin/showProfesores.hbs', { title: 'Profesores', Profesor: Profesor });
 
 });
 
-router.get('/deleteProfesor/:id', async (req, res) => {
+router.get('/deleteProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM Profesor WHERE idProfesor = ?', [id]);
   req.flash('success', 'Profesor eliminado correctamente');
@@ -114,7 +117,7 @@ router.get('/deleteProfesor/:id', async (req, res) => {
 })
 
 
-router.post('/addProfesor', async (req, res) => { //async es necesario para el await
+router.post('/addProfesor', isLoggedIn, isAdmin, async (req, res) => { //async es necesario para el await
   const { Nombre, Apellidos, DNI, Dirección, Telefono, Email } = req.body;
   const newTeacher = {
     Nombre,
@@ -137,14 +140,14 @@ router.post('/addProfesor', async (req, res) => { //async es necesario para el a
 
 
 
-router.get('/editProfesor/:id', async (req, res) => {
+router.get('/editProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [id]);
   res.render('admin/editProfesor', { Profesor: Profesor[0] })
 
 });
 
-router.post('/editProfesor/:id', async (req, res) => {
+router.post('/editProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const { Nombre, Apellidos, DNI, Dirección, Telefono, Email } = req.body;
   const newProfesor = {
