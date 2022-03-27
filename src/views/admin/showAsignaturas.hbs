@@ -1,0 +1,54 @@
+{{#if Asignatura}}
+
+<table border="2px">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Código de Asignatura</th>
+            <th>Profesor</th>
+            <th>Acción</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Asignatura}}
+        <tr>
+            <td>
+                {{Nombre}}
+            </td>
+            <td>
+                {{Codigo}}
+            </td>
+            <td>
+                {{Profesor}}
+            </td>
+            <td>
+                <a href="/administration/editCurso/{{idAsignatura}}" style="color: black;" aria-disabled="true">Editar</a>
+                <a href="/administration/deleteAsignatura/{{idAsignatura}}" style="color: black;">Eliminar</a>
+
+            </td>
+
+        </tr>
+    </tbody>
+
+
+    {{/each}}
+</table>
+<div class="colum col-md-4 offset-md-4 mx-auto p-4" style="align-items: center;">
+    <div class="card" style="align-items: center;">
+        <div class="card-header text-center" style="align-items: center;">
+            <a class="nav-link" id="nav-link_admin" href="/administration/altacurso">Dar de Alta Nueva Asignatura</a>
+        </div>
+    </div>
+</div>
+{{else}}
+<!--mitico else-->
+<div class="col-md-4 mx-auto p-4">
+    <div class="card cardbody text-center">
+        <p>No hay Alumnos registrados aún.</p>
+        <a class="nav-link" id="nav-link_admin" href="/administration/altacurso">Dar de Alta Nueva Asignatura</a>
+
+
+    </div>
+</div>
+{{/if}}

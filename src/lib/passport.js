@@ -84,7 +84,7 @@ passport.use('local.signup', new LocalStrategy({
 }));
 
 //para guardar el usuario en una sesion
-passport.serializeUser((user, done) => {
+passport.serializeUser(async(user, done) => {
     done(null, user.idusers);
 });
 passport.deserializeUser(async (id, done) => {

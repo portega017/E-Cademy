@@ -56,6 +56,10 @@ router.post('/addAlumno', isLoggedIn, isAdmin, async (req, res) => { //async es 
 
 router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
+  const alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
+  if (alumno.length > 0) {
+    await pool.query('DELETE FROM users WHERE DNI = ?', [alumno[0].DNI]);
+  }
   await pool.query('DELETE FROM Alumno WHERE idAlumno = ?', [id]);
   req.flash('success', 'Alumno eliminado correctamente');
 
@@ -109,6 +113,10 @@ router.get('/teachers', isLoggedIn, isAdmin, async (req, res, next) => {
 
 router.get('/deleteProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
+  const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [id]);
+  if (profesor.length > 0) {
+    await pool.query('DELETE FROM users WHERE DNI = ?', [profesor[0].DNI]);
+  }
   await pool.query('DELETE FROM Profesor WHERE idProfesor = ?', [id]);
   req.flash('success', 'Profesor eliminado correctamente');
 
@@ -164,5 +172,78 @@ router.post('/editProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   res.redirect('/administration/teachers')
 });
 
+
+
+
+//ASIGNATURAS
+
+router.get('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
+  const profesores = await pool.query('SELECT * FROM Profesor');
+
+  res.render('admin/altaCurso.hbs', { title: 'Administración', profesores: profesores });
+
+});
+
+router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
+  const { Nombre, Codigo, idProfesor } = req.body;
+  const asignatura = {
+    Nombre,
+    Codigo,
+    idProfesor
+  };
+  const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE Codigo = ?', [asignatura.Codigo]);
+  const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [asignatura.idProfesor]);
+  asignatura.Profesor = profesor[0].Nombre +' '+profesor[0].Apellidos;
+  if (Asignatura.length == 0) {
+    await pool.query('INSERT INTO Asignatura SET ?', [asignatura]);//await= me tomo mi tiempo y luego continuo con la ejecución
+    req.flash('success', 'Curso registrado correctamente.');
+  } else {
+    req.flash('message', 'El curso ya existe.');
+  }
+  res.redirect("/administration/asignaturas");
+});
+
+router.get('/asignaturas', isLoggedIn, isAdmin, async (req, res, next) => {
+  const Asignatura = await pool.query('SELECT * FROM Asignatura');
+
+  res.render('admin/showAsignaturas.hbs', { title: 'Asignaturas', Asignatura });
+
+});
+
+router.get('/deleteAsignatura/:id', isLoggedIn, isAdmin, async (req, res) => {
+  const { id } = req.params;
+  await pool.query('DELETE FROM Asignatura WHERE idAsignatura = ?', [id]);
+  req.flash('success', 'Asignatura eliminada correctamente');
+
+  res.redirect('/administration/asignaturas');
+
+})
+
+router.get('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE idAsignatura = ?', [id]);
+  const profesores = await pool.query('SELECT * FROM Profesor');
+
+  res.render('admin/editCurso', { Asignatura: Asignatura[0],profesores })
+
+
+});
+
+router.post('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { Nombre, Codigo, idProfesor} = req.body;
+  const newAsignatura = {
+    Nombre,
+    Codigo,
+    idProfesor
+  };
+
+  const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [newAsignatura.idProfesor]);
+  newAsignatura.Profesor = profesor[0].Nombre +' '+profesor[0].Apellidos;
+  await pool.query('UPDATE Asignatura SET ? WHERE idAsignatura = ?', [newAsignatura, id]);
+  req.flash('success', 'Asignatura editada correctamente');
+
+  res.redirect('/administration/asignaturas')
+});
 
 module.exports = router;

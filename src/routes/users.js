@@ -4,13 +4,20 @@ const pool = require('../database')
 const { isLoggedIn } = require('../lib/auth');
 const { isNotLoggedIn } = require('../lib/auth');
 
-router.get('/profile.html', isLoggedIn,(req,res)=>{
+router.get('/profile.html', isLoggedIn, (req, res) => {
     res.render('user/myprofile');
 });
-router.get('/edit',isLoggedIn,(req,res)=>{
+router.get('/edit', isLoggedIn, (req, res) => {
     res.render('user/editProfile');
 });
 router.get('/courses', isLoggedIn, (req, res) => {
-    res.render('user/courses')
+    if (req.user.id_rol == 1) {
+        res.redirect('/administration')
+    } else {
+        res.render('user/courses');
+    }
 });
+
+
+
 module.exports = router;

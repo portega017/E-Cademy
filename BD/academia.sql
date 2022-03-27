@@ -39,6 +39,26 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `academia`.`Profesor`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `academia`.`Profesor` ;
+
+CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
+  `idProfesor` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Apellidos` VARCHAR(45) NOT NULL,
+  `Dirección` VARCHAR(45) NOT NULL,
+  `Telefono` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(45) NOT NULL,
+  `DNI` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idProfesor`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `academia`.`Asignatura`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `academia`.`Asignatura` ;
@@ -47,7 +67,15 @@ CREATE TABLE IF NOT EXISTS `academia`.`Asignatura` (
   `idAsignatura` INT NOT NULL AUTO_INCREMENT,
   `Codigo` VARCHAR(45) NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idAsignatura`))
+  `idProfesor` INT NOT NULL,
+  `Profesor` VARCHAR(120) NOT NULL,
+  PRIMARY KEY (`idAsignatura`),
+  INDEX `fk_Asignatura_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
+  CONSTRAINT `fk_Asignatura_Profesor1`
+    FOREIGN KEY (`idProfesor`)
+    REFERENCES `academia`.`Profesor` (`idProfesor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -131,26 +159,6 @@ CREATE TABLE IF NOT EXISTS `academia`.`Pagos` (
     FOREIGN KEY (`Alumno_idAlumno`)
     REFERENCES `academia`.`Alumno` (`idAlumno`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `academia`.`Profesor`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Profesor` ;
-
-CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
-  `idProfesor` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Apellidos` VARCHAR(45) NOT NULL,
-  `Dirección` VARCHAR(45) NOT NULL,
-  `Telefono` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(45) NOT NULL,
-  `DNI` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idProfesor`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -247,8 +255,8 @@ CREATE TABLE IF NOT EXISTS `academia`.`users` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(60) NOT NULL,
   `DNI` VARCHAR(45) NOT NULL,
-  `fullname` VARCHAR(45) NOT NULL,
   `id_rol` INT NOT NULL,
+  `fullname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idusers`),
   INDEX `fk_users_user_roles1_idx` (`id_rol` ASC) VISIBLE,
   CONSTRAINT `fk_users_user_roles1`
@@ -266,3 +274,4 @@ insert into user_roles (id_rol, rol) values (1, 'admin');
 insert into user_roles (id_rol, rol) values (2, 'profesor');
 insert into user_roles (id_rol, rol) values (3, 'alumno');
 insert into users (idusers, username, password, DNI, id_rol, fullname) values (1, 'pibol','$2a$10$dEJbgghoPtfqlEC48mJNmuQZXR.vSn5HZgZD9wkWzHpZUTGA6LY2i', '16094053X', 1, 'Pablo');
+

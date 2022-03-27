@@ -3,17 +3,19 @@ const router = express.Router();
 const db = require('../database')
 const path = require('path');
 const fs = require('fs');
+const { isLoggedIn } = require('../lib/auth');
+const { isTeacher } = require('../lib/auth');
 
 
 //middlewares
 
 //ROUTES
-router.get('/', (req, res) => {
+router.get('/', isLoggedIn, isTeacher, (req, res) => {
 
   res.render('admin/admin.hbs', { title: 'Administración' });
 });
 
-router.get('/fileUpload', (req, res) => {
+router.get('/fileUpload', isTeacher, (req, res) => {
 
   res.render('profesor/fileUpload.hbs', { title: 'Subir Apuntes' });
 });
@@ -41,8 +43,9 @@ router.post('/upload', function (req, res) {
     console.log(file.mimetype);
     //res.send('File uploaded!');
     res.send(file.ext);
-//    res.redirect('/teacher/fileUpload');
+    //    res.redirect('/teacher/fileUpload');
 
   });
+  res.redirect('/courses');
 });
 module.exports = router;

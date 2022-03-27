@@ -8,6 +8,15 @@ module.exports = {
         }
         return res.redirect('/courses')
     },
+    async isTeacher(req, res, next) {
+        
+        if (await helpers.isTeacher(req.user.id_rol)) {
+            return next();
+        }else if (await helpers.isAdmin(req.user.id_rol)) {
+            return res.redirect('/administration');
+        }
+        return res.redirect('/courses')
+    },
 
     isLoggedIn(req, res, next) {
         if (req.isAuthenticated()) {

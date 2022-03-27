@@ -1,0 +1,29 @@
+<div class="login">
+	<div class="card-header bg-dark text-white text-center">
+		<h3>Editar Asignatura</h3>
+	</div>
+	<div class="card-body">
+		<form action="/administration/editCurso/{{Asignatura.idAsignatura}}" method="post">
+			<label for="Nombre">
+				<!-- font awesome icon -->
+				<i class="fas fa-book"></i>
+			</label>
+			<input type="text" name="Nombre" placeholder="Nombre de la asignatura" id="nombre" required value="{{Asignatura.Nombre}}">
+			<label for="codigo">
+				<i class="fas fa-hashtag"></i>
+			</label>
+
+			
+			<input type="text" name="Codigo" placeholder="Codigo de la Asignatura" id="codigo" required value="{{Asignatura.Codigo}}">
+			<select class="form-select" name="idProfesor" id="profesor" >
+				{{#each profesores}}
+				<option value="{{idProfesor}}">{{Nombre}} {{Apellidos}}</option>
+				{{/each}}
+			</select>
+			<input type="submit" value="Dar de Alta">
+		</form>
+
+	</div>
+</div>
+
+<br />
