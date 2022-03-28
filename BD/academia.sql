@@ -21,8 +21,6 @@ USE `academia` ;
 -- -----------------------------------------------------
 -- Table `academia`.`Alumno`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Alumno` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Alumno` (
   `idAlumno` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
@@ -41,8 +39,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`Profesor`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Profesor` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
   `idProfesor` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
@@ -61,14 +57,11 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`Asignatura`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Asignatura` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Asignatura` (
   `idAsignatura` INT NOT NULL AUTO_INCREMENT,
   `Codigo` VARCHAR(45) NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
   `idProfesor` INT NOT NULL,
-  `Profesor` VARCHAR(120) NOT NULL,
   PRIMARY KEY (`idAsignatura`),
   INDEX `fk_Asignatura_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
   CONSTRAINT `fk_Asignatura_Profesor1`
@@ -84,8 +77,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`Grupo`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Grupo` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Grupo` (
   `idGrupo` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
@@ -100,8 +91,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`Aula`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Aula` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Aula` (
   `idAula` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
@@ -119,8 +108,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`Horario_Alumno`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Horario_Alumno` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Horario_Alumno` (
   `idHorario_Alumno` INT NOT NULL AUTO_INCREMENT,
   `idAsignatura` INT NOT NULL,
@@ -145,8 +132,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`Pagos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`Pagos` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`Pagos` (
   `idPagos` INT NOT NULL AUTO_INCREMENT,
   `concepto` VARCHAR(45) NOT NULL,
@@ -164,51 +149,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `academia`.`UsuarioAl`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`UsuarioAl` ;
-
-CREATE TABLE IF NOT EXISTS `academia`.`UsuarioAl` (
-  `idUsuarioAl` INT NOT NULL AUTO_INCREMENT,
-  `NomUser` VARCHAR(45) NOT NULL,
-  `Passw` VARCHAR(45) NOT NULL,
-  `idAlumno` INT NOT NULL,
-  PRIMARY KEY (`idUsuarioAl`),
-  INDEX `fk_UsuarioAl_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
-  CONSTRAINT `fk_UsuarioAl_Alumno1`
-    FOREIGN KEY (`idAlumno`)
-    REFERENCES `academia`.`Alumno` (`idAlumno`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `academia`.`UsuarioProf`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`UsuarioProf` ;
-
-CREATE TABLE IF NOT EXISTS `academia`.`UsuarioProf` (
-  `idUsuarioProf` INT NOT NULL AUTO_INCREMENT,
-  `NomUser` VARCHAR(45) NOT NULL,
-  `Passw` VARCHAR(45) NOT NULL,
-  `idProfesor` INT NOT NULL,
-  PRIMARY KEY (`idUsuarioProf`),
-  INDEX `fk_UsuarioProf_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
-  CONSTRAINT `fk_UsuarioProf_Profesor1`
-    FOREIGN KEY (`idProfesor`)
-    REFERENCES `academia`.`Profesor` (`idProfesor`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
 -- Table `academia`.`horario_profesor`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`horario_profesor` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`horario_profesor` (
   `idProfesor` INT NOT NULL,
   `idAsignatura` INT NOT NULL,
@@ -236,8 +178,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `academia`.`user_roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`user_roles` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`user_roles` (
   `id_rol` INT NOT NULL AUTO_INCREMENT,
   `rol` VARCHAR(45) NOT NULL,
@@ -248,8 +188,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `academia`.`users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `academia`.`users` ;
-
 CREATE TABLE IF NOT EXISTS `academia`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,

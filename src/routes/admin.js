@@ -71,7 +71,7 @@ router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
 router.get('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
-  res.render('admin/editAlumno', { title:'Editar Alumno',Alumno: Alumno[0] })
+  res.render('admin/editAlumno', { title: 'Editar Alumno', Alumno: Alumno[0] })
 
 });
 
@@ -150,7 +150,7 @@ router.post('/addProfesor', isLoggedIn, isAdmin, async (req, res) => { //async e
 router.get('/editProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [id]);
-  res.render('admin/editProfesor', { title:'Editar Profesor',Profesor: Profesor[0] })
+  res.render('admin/editProfesor', { title: 'Editar Profesor', Profesor: Profesor[0] })
 
 });
 
@@ -176,8 +176,8 @@ router.get('/altaHorario', isLoggedIn, isAdmin, async (req, res) => {
   const asignaturas = await pool.query('SELECT * FROM Asignatura')
   res.render('admin/altaHorario', { title: 'Alta Horario', asignaturas })
 });
-router.post('/altaHorario', isLoggedIn,isAdmin,async(req,res)=>{
-res.redirect('/horario')
+router.post('/altaHorario', isLoggedIn, isAdmin, async (req, res) => {
+  res.redirect('/horario')
 });
 
 //ASIGNATURAS
@@ -197,8 +197,6 @@ router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
     idProfesor
   };
   const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE Codigo = ?', [asignatura.Codigo]);
-  const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [asignatura.idProfesor]);
-  asignatura.Profesor = profesor[0].Nombre + ' ' + profesor[0].Apellidos;
   if (Asignatura.length == 0) {
     await pool.query('INSERT INTO Asignatura SET ?', [asignatura]);//await= me tomo mi tiempo y luego continuo con la ejecución
     req.flash('success', 'Curso registrado correctamente.');
@@ -210,7 +208,14 @@ router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
 
 router.get('/asignaturas', isLoggedIn, isAdmin, async (req, res, next) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura');
+  console.log(Asignatura.length)
+  for (var i = 0; i < Asignatura.length; i++) {
+    const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [Asignatura[i].idProfesor]);
 
+    Asignatura[i].Profesor = profesor[i].Nombre + ' ' + profesor[i].Apellidos;
+
+
+  }
   res.render('admin/showAsignaturas.hbs', { title: 'Asignaturas', Asignatura });
 
 });
@@ -229,7 +234,7 @@ router.get('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE idAsignatura = ?', [id]);
   const profesores = await pool.query('SELECT * FROM Profesor');
 
-  res.render('admin/editCurso', {title: 'Editar Asignatura', Asignatura: Asignatura[0], profesores })
+  res.render('admin/editCurso', { title: 'Editar Asignatura', Asignatura: Asignatura[0], profesores })
 
 
 });
