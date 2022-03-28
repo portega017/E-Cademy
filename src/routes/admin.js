@@ -71,7 +71,7 @@ router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
 router.get('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
-  res.render('admin/editAlumno', { Alumno: Alumno[0] })
+  res.render('admin/editAlumno', { title:'Editar Alumno',Alumno: Alumno[0] })
 
 });
 
@@ -136,7 +136,6 @@ router.post('/addProfesor', isLoggedIn, isAdmin, async (req, res) => { //async e
     Email
   };
   const Teacher = await pool.query('SELECT * FROM Profesor WHERE DNI = ?', [newTeacher.DNI]);
-  console.log(Teacher.length)
   if (Teacher.length == 0) {
     await pool.query('INSERT INTO Profesor SET ?', [newTeacher]);//await= me tomo mi tiempo y luego continuo con la ejecución
     req.flash('success', 'Profesor registrado correctamente.');
@@ -151,7 +150,7 @@ router.post('/addProfesor', isLoggedIn, isAdmin, async (req, res) => { //async e
 router.get('/editProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [id]);
-  res.render('admin/editProfesor', { Profesor: Profesor[0] })
+  res.render('admin/editProfesor', { title:'Editar Profesor',Profesor: Profesor[0] })
 
 });
 
@@ -172,15 +171,21 @@ router.post('/editProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   res.redirect('/administration/teachers')
 });
 
-
-
+//HORARIOS
+router.get('/altaHorario', isLoggedIn, isAdmin, async (req, res) => {
+  const asignaturas = await pool.query('SELECT * FROM Asignatura')
+  res.render('admin/altaHorario', { title: 'Alta Horario', asignaturas })
+});
+router.post('/altaHorario', isLoggedIn,isAdmin,async(req,res)=>{
+res.redirect('/horario')
+});
 
 //ASIGNATURAS
 
 router.get('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
   const profesores = await pool.query('SELECT * FROM Profesor');
 
-  res.render('admin/altaCurso.hbs', { title: 'Administración', profesores: profesores });
+  res.render('admin/altaCurso.hbs', { title: 'Alta Asignatura', profesores: profesores });
 
 });
 
@@ -193,7 +198,7 @@ router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
   };
   const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE Codigo = ?', [asignatura.Codigo]);
   const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [asignatura.idProfesor]);
-  asignatura.Profesor = profesor[0].Nombre +' '+profesor[0].Apellidos;
+  asignatura.Profesor = profesor[0].Nombre + ' ' + profesor[0].Apellidos;
   if (Asignatura.length == 0) {
     await pool.query('INSERT INTO Asignatura SET ?', [asignatura]);//await= me tomo mi tiempo y luego continuo con la ejecución
     req.flash('success', 'Curso registrado correctamente.');
@@ -224,14 +229,14 @@ router.get('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE idAsignatura = ?', [id]);
   const profesores = await pool.query('SELECT * FROM Profesor');
 
-  res.render('admin/editCurso', { Asignatura: Asignatura[0],profesores })
+  res.render('admin/editCurso', {title: 'Editar Asignatura', Asignatura: Asignatura[0], profesores })
 
 
 });
 
 router.post('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
-  const { Nombre, Codigo, idProfesor} = req.body;
+  const { Nombre, Codigo, idProfesor } = req.body;
   const newAsignatura = {
     Nombre,
     Codigo,
@@ -239,7 +244,7 @@ router.post('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
   };
 
   const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [newAsignatura.idProfesor]);
-  newAsignatura.Profesor = profesor[0].Nombre +' '+profesor[0].Apellidos;
+  newAsignatura.Profesor = profesor[0].Nombre + ' ' + profesor[0].Apellidos;
   await pool.query('UPDATE Asignatura SET ? WHERE idAsignatura = ?', [newAsignatura, id]);
   req.flash('success', 'Asignatura editada correctamente');
 

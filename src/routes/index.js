@@ -17,13 +17,10 @@ router.get('/contact', (req, res) => {
 
 
 
-router.get('/dashboard', (req, res) => {
-    res.render('index.html', { title: 'E-cademy' });
-})
 
 router.get('/horario', (req, res, next) => {
 
-    res.render('horario', { title: 'Alumnos' });
+    res.render('horario', { title: 'Horarios' });
 
 });
 
