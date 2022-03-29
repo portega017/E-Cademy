@@ -43,13 +43,15 @@ router.post('/addAlumno', isLoggedIn, isAdmin, async (req, res) => { //async es 
     Telefono,
     Correo
   };
+  const Teacher = await pool.query('SELECT * FROM Profesor WHERE DNI = ?', [newStudent.DNI]);
   const Alumno = await pool.query('SELECT * FROM Alumno WHERE DNI = ?', [newStudent.DNI]);
+  const users = await pool.query('SELECT * FROM users WHERE DNI = ?', [newStudent.DNI]);
   console.log(Alumno.length)
-  if (Alumno.length == 0) {
+  if (Teacher.length == 0 && Alumno.length == 0 && users.length == 0) {
     await pool.query('INSERT INTO Alumno SET ?', [newStudent]);//await= me tomo mi tiempo y luego continuo con la ejecución
     req.flash('success', 'Alumno registrado correctamente.');
   } else {
-    req.flash('success', 'El alumno ya existe.');
+    req.flash('message', 'El DNI ya existe en la Base de Datos.');
   }
   res.redirect("/administration/students");
 });
@@ -114,12 +116,16 @@ router.get('/teachers', isLoggedIn, isAdmin, async (req, res, next) => {
 router.get('/deleteProfesor/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [id]);
-  if (profesor.length > 0) {
-    await pool.query('DELETE FROM users WHERE DNI = ?', [profesor[0].DNI]);
+  const asignatura = await pool.query('SELECT * FROM Asignatura WHERE idProfesor = ?', [id]);
+  if (asignatura.length == 0) {
+    if (profesor.length > 0) {
+      await pool.query('DELETE FROM users WHERE DNI = ?', [profesor[0].DNI]);
+    }
+    await pool.query('DELETE FROM Profesor WHERE idProfesor = ?', [id]);
+    req.flash('success', 'Profesor eliminado correctamente');
+  } else {
+    req.flash('message', 'No se puede eliminar el profesor, tiene una asignatura asociada');
   }
-  await pool.query('DELETE FROM Profesor WHERE idProfesor = ?', [id]);
-  req.flash('success', 'Profesor eliminado correctamente');
-
   res.redirect('/administration/teachers');
 
 })
@@ -136,11 +142,13 @@ router.post('/addProfesor', isLoggedIn, isAdmin, async (req, res) => { //async e
     Email
   };
   const Teacher = await pool.query('SELECT * FROM Profesor WHERE DNI = ?', [newTeacher.DNI]);
-  if (Teacher.length == 0) {
+  const Alumno = await pool.query('SELECT * FROM Alumno WHERE DNI = ?', [newTeacher.DNI]);
+  const users = await pool.query('SELECT * FROM users WHERE DNI = ?', [newTeacher.DNI]);
+  if (Teacher.length == 0 && Alumno.length == 0 && users.length == 0) {
     await pool.query('INSERT INTO Profesor SET ?', [newTeacher]);//await= me tomo mi tiempo y luego continuo con la ejecución
     req.flash('success', 'Profesor registrado correctamente.');
   } else {
-    req.flash('success', 'El profesor ya existe.');
+    req.flash('message', 'El DNI ya existe en la Base de Datos.');
   }
   res.redirect("/administration/teachers");
 });
