@@ -56,6 +56,7 @@ router.post('/addAlumno', isLoggedIn, isAdmin, async (req, res) => { //async es 
   res.redirect("/administration/students");
 });
 
+
 router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
