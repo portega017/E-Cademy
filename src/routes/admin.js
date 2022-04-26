@@ -22,7 +22,8 @@ router.get('/registerTime', isLoggedIn, isAdmin, (req, res, next) => {
 
 //ALUMNOS
 router.get('/registerStudent', isLoggedIn, isAdmin, async (req, res, next) => {
-  res.render('admin/altaAlumno.hbs', { title: 'Nuevo Alumno' });
+  const Asignaturas = await pool.query('SELECT * FROM Asignatura')
+  res.render('admin/altaAlumno.hbs', { title: 'Nuevo Alumno', Asignatura: Asignaturas });
 });
 
 
@@ -218,13 +219,21 @@ router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
 router.get('/asignaturas', isLoggedIn, isAdmin, async (req, res, next) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura');
   console.log(Asignatura.length)
-  for (var i = 0; i < Asignatura.length; i++) {
-    const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [Asignatura[i].idProfesor]);
-
-    Asignatura[i].Profesor = profesor[i].Nombre + ' ' + profesor[i].Apellidos;
-
+  const profesor = await pool.query('SELECT * FROM Profesor');
+  console.log(profesor)
+  var i = 0
+  while (i < Asignatura.length) {
+    for (var j = 0; j < profesor.length; j++) {
+      if (Asignatura[i].idProfesor == profesor[j].idProfesor) {
+        Asignatura[i].Profesor = profesor[j].Nombre + ' ' + profesor[j].Apellidos;
+      }
+      console.log(Asignatura[i])
+    }
+    i++
 
   }
+  //console.log(Asignatura)
+
   res.render('admin/showAsignaturas.hbs', { title: 'Asignaturas', Asignatura });
 
 });
@@ -258,7 +267,6 @@ router.post('/editCurso/:id', isLoggedIn, isAdmin, async (req, res) => {
   };
 
   const profesor = await pool.query('SELECT * FROM Profesor WHERE idProfesor = ?', [newAsignatura.idProfesor]);
-  newAsignatura.Profesor = profesor[0].Nombre + ' ' + profesor[0].Apellidos;
   await pool.query('UPDATE Asignatura SET ? WHERE idAsignatura = ?', [newAsignatura, id]);
   req.flash('success', 'Asignatura editada correctamente');
 
