@@ -218,16 +218,16 @@ router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
 
 router.get('/asignaturas', isLoggedIn, isAdmin, async (req, res, next) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura');
-  console.log(Asignatura.length)
+  
   const profesor = await pool.query('SELECT * FROM Profesor');
-  console.log(profesor)
+  
   var i = 0
   while (i < Asignatura.length) {
     for (var j = 0; j < profesor.length; j++) {
       if (Asignatura[i].idProfesor == profesor[j].idProfesor) {
         Asignatura[i].Profesor = profesor[j].Nombre + ' ' + profesor[j].Apellidos;
       }
-      console.log(Asignatura[i])
+      
     }
     i++
 
