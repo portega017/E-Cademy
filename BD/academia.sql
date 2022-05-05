@@ -226,9 +226,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`RelAsAl` (
   `idAlumno` INT NOT NULL,
-  `Asignatura` INT NOT NULL,
-  PRIMARY KEY (`idAlumno`, `Asignatura`),
-  INDEX `fk_Alumno_has_Asignatura_Asignatura1_idx` (`Asignatura` ASC) VISIBLE,
+  `idAsignatura` INT NOT NULL,
+  PRIMARY KEY (`idAlumno`, `idAsignatura`),
+  INDEX `fk_Alumno_has_Asignatura_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
   INDEX `fk_Alumno_has_Asignatura_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
   CONSTRAINT `fk_Alumno_has_Asignatura_Alumno1`
     FOREIGN KEY (`idAlumno`)
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`RelAsAl` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Alumno_has_Asignatura_Asignatura1`
-    FOREIGN KEY (`Asignatura`)
+    FOREIGN KEY (`idAsignatura`)
     REFERENCES `academia`.`Asignatura` (`idAsignatura`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
