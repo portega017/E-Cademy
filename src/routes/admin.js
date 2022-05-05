@@ -30,12 +30,34 @@ router.get('/registerStudent', isLoggedIn, isAdmin, async (req, res, next) => {
 router.get('/students', isLoggedIn, isAdmin, async (req, res, next) => {
   const Alumno = await pool.query('SELECT * FROM Alumno');
 
+  const Asignatura = await pool.query('SELECT * FROM Asignatura');
+
+  const Rel = await pool.query('SELECT * FROM RelAsAl');
+  var asig = []
+  var i = 0
+
+  while (i < Alumno.length) {
+    for (var j = 0; j < Rel.length; j++) {
+      for (var k = 0; k < Asignatura.length; k++) {
+        if (Alumno[i].idAlumno == Rel[j].idAlumno) {
+          if(Asignatura[k].idAsignatura==Rel[j].idAsignatura){
+            asig.push(Asignatura[k].Nombre)
+
+          }
+
+        }
+      }
+    }
+    Alumno[i].Asignaturas = asig
+    i++
+  }
+  console.log(Alumno)
   res.render('admin/showAlumnos.hbs', { title: 'Alumnos', Alumno: Alumno });
 
 });
 
 router.post('/addAlumno', isLoggedIn, isAdmin, async (req, res) => { //async es necesario para el await
-  const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo } = req.body;
+  const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo, Asignatura } = req.body;
   const newStudent = {
     Nombre,
     Apellidos,
@@ -47,10 +69,22 @@ router.post('/addAlumno', isLoggedIn, isAdmin, async (req, res) => { //async es 
   const Teacher = await pool.query('SELECT * FROM Profesor WHERE DNI = ?', [newStudent.DNI]);
   const Alumno = await pool.query('SELECT * FROM Alumno WHERE DNI = ?', [newStudent.DNI]);
   const users = await pool.query('SELECT * FROM users WHERE DNI = ?', [newStudent.DNI]);
-  console.log(Alumno.length)
+
   if (Teacher.length == 0 && Alumno.length == 0 && users.length == 0) {
     await pool.query('INSERT INTO Alumno SET ?', [newStudent]);//await= me tomo mi tiempo y luego continuo con la ejecución
     req.flash('success', 'Alumno registrado correctamente.');
+    const idAl = await pool.query('SELECT idAlumno FROM Alumno WHERE DNI = ?', [newStudent.DNI]);
+
+    for (var i = 0; i < Asignatura.length; i++) {
+      const idAlumno = idAl[0].idAlumno
+
+      const idAsignatura = parseInt(Asignatura[i])
+      const Rel = {
+        idAlumno,
+        idAsignatura
+      }
+      await pool.query('INSERT INTO RelAsAl SET ?', [Rel])
+    }
   } else {
     req.flash('message', 'El DNI ya existe en la Base de Datos.');
   }
@@ -218,16 +252,16 @@ router.post('/altacurso', isLoggedIn, isAdmin, async (req, res) => {
 
 router.get('/asignaturas', isLoggedIn, isAdmin, async (req, res, next) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura');
-  
+
   const profesor = await pool.query('SELECT * FROM Profesor');
-  
+
   var i = 0
   while (i < Asignatura.length) {
     for (var j = 0; j < profesor.length; j++) {
       if (Asignatura[i].idProfesor == profesor[j].idProfesor) {
         Asignatura[i].Profesor = profesor[j].Nombre + ' ' + profesor[j].Apellidos;
       }
-      
+
     }
     i++
 

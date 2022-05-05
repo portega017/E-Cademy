@@ -30,9 +30,9 @@
                             <input type="email" class="form-control" placeholder="Email" name="Correo" required="true">
                         </div>
                         
-                            <select class="form-select" name="Asignatura" multiple>
+                            <select class="form-select" id="asignatura" name="Asignatura" multiple="multiple" required="true">
                                 {{#each Asignatura}}
-                                <option value="1">{{Nombre}}</option>
+                                <option value="{{idAsignatura}}">{{Nombre}}</option>
                                 {{/each}}
                             </select>
                         

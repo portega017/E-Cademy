@@ -5,7 +5,8 @@ const fileupload = require('express-fileupload');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-
+const https = require("https");
+const fs = require("fs");
 const flash = require('connect-flash');
 const session = require('express-session');
 const MySQLStore=require('express-mysql-session')
