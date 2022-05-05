@@ -7,9 +7,7 @@ const { isNotLoggedIn } = require('../lib/auth');
 router.get('/profile.html', isLoggedIn, (req, res) => {
     res.render('user/myprofile');
 });
-router.get('/courses', isLoggedIn, (req, res) => {
-    res.render('user/courses');
-});
+
 router.get('/edit', isLoggedIn, (req, res) => {
     res.render('user/editProfile');
 });

@@ -33,25 +33,28 @@ router.get('/students', isLoggedIn, isAdmin, async (req, res, next) => {
   const Asignatura = await pool.query('SELECT * FROM Asignatura');
 
   const Rel = await pool.query('SELECT * FROM RelAsAl');
-  var asig = []
   var i = 0
 
   while (i < Alumno.length) {
+    const asig = []
+
     for (var j = 0; j < Rel.length; j++) {
+
       for (var k = 0; k < Asignatura.length; k++) {
         if (Alumno[i].idAlumno == Rel[j].idAlumno) {
           if(Asignatura[k].idAsignatura==Rel[j].idAsignatura){
             asig.push(Asignatura[k].Nombre)
 
           }
+          Alumno[i].Asignaturas = asig
 
         }
       }
     }
-    Alumno[i].Asignaturas = asig
+
     i++
   }
-  console.log(Alumno)
+  //console.log(Alumno)
   res.render('admin/showAlumnos.hbs', { title: 'Alumnos', Alumno: Alumno });
 
 });
@@ -97,6 +100,8 @@ router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
   if (alumno.length > 0) {
     await pool.query('DELETE FROM users WHERE DNI = ?', [alumno[0].DNI]);
+    await pool.query('DELETE FROM RelAsAl WHERE idAlumno = ?', [id]);
+
   }
   await pool.query('DELETE FROM Alumno WHERE idAlumno = ?', [id]);
   req.flash('success', 'Alumno eliminado correctamente');
