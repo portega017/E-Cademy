@@ -20,10 +20,11 @@ require('./lib/passport');
 var adminRouter = require('./routes/admin');
 var profRouter = require('./routes/profesor');
 var userRouter=require('./routes/users');
+var courseRouter=require('./routes/courses');
 
 
 //settings
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 
 
@@ -69,6 +70,7 @@ app.use(require('./routes/authentication'));
 app.use('/administration', adminRouter);
 app.use('/teacher', profRouter);
 app.use(userRouter);
+app.use('/courses',courseRouter);
 
 //Public
 app.use(express.static(path.join(__dirname,'public')))

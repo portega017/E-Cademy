@@ -17,7 +17,7 @@ passport.use('local.signin', new LocalStrategy({
         const user = rows[0];
         await helpers.isAdmin(user.id_rol)
         const validPassword = await helpers.matchPassword(password, user.password);
-        
+
         if (validPassword) {
             done(null, user, req.flash('success', 'Bienvenido ' + user.username));
 
@@ -29,7 +29,13 @@ passport.use('local.signin', new LocalStrategy({
     }
 }));
 
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
 
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
 
 
 //SIGNUP
@@ -56,7 +62,7 @@ passport.use('local.signup', new LocalStrategy({
         return done(null, false, req.flash('message', 'El usuario ya está registrado'));
     } else if (compruebaP.length > 0) {
         newUser.id_rol = 2;
-        newUser.fullname=compruebaP[0].Nombre;
+        newUser.fullname = compruebaP[0].Nombre;
         const result = await pool.query('INSERT INTO users SET ?', [newUser]);
         newUser.id = result.insertId;
         //para seguir adelante despues del signUp.
@@ -64,7 +70,7 @@ passport.use('local.signup', new LocalStrategy({
 
     } else if (compruebaA.length > 0) {
         newUser.id_rol = 3;
-        newUser.fullname=compruebaA[0].Nombre;
+        newUser.fullname = compruebaA[0].Nombre;
 
         const result = await pool.query('INSERT INTO users SET ?', [newUser]);
         newUser.id = result.insertId;
@@ -84,7 +90,7 @@ passport.use('local.signup', new LocalStrategy({
 }));
 
 //para guardar el usuario en una sesion
-passport.serializeUser(async(user, done) => {
+passport.serializeUser(async (user, done) => {
     done(null, user.idusers);
 });
 passport.deserializeUser(async (id, done) => {
