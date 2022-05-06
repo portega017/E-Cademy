@@ -15,7 +15,7 @@ DROP SCHEMA IF EXISTS `academia` ;
 -- -----------------------------------------------------
 -- Schema academia
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `academia` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+CREATE SCHEMA IF NOT EXISTS `academia` DEFAULT CHARACTER SET utf8mb4;
 USE `academia` ;
 
 -- -----------------------------------------------------
@@ -31,9 +31,8 @@ CREATE TABLE IF NOT EXISTS `academia`.`Alumno` (
   `DNI` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idAlumno`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 18
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -49,9 +48,8 @@ CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
   `DNI` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idProfesor`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -68,9 +66,8 @@ CREATE TABLE IF NOT EXISTS `academia`.`Asignatura` (
     FOREIGN KEY (`idProfesor`)
     REFERENCES `academia`.`Profesor` (`idProfesor`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -83,8 +80,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Grupo` (
   `Turno` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idGrupo`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -100,8 +96,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Aula` (
     FOREIGN KEY (`Grupo_idGrupo`)
     REFERENCES `academia`.`Grupo` (`idGrupo`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -124,8 +119,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Horario_Alumno` (
     FOREIGN KEY (`idAsignatura`)
     REFERENCES `academia`.`Asignatura` (`idAsignatura`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -143,8 +137,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Pagos` (
     FOREIGN KEY (`Alumno_idAlumno`)
     REFERENCES `academia`.`Alumno` (`idAlumno`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -170,8 +163,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`horario_profesor` (
     FOREIGN KEY (`idProfesor`)
     REFERENCES `academia`.`Profesor` (`idProfesor`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -183,8 +175,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`sessions` (
   `data` MEDIUMTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_bin' NULL DEFAULT NULL,
   PRIMARY KEY (`session_id`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -196,8 +187,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`user_roles` (
   PRIMARY KEY (`id_rol`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -217,8 +207,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`users` (
     REFERENCES `academia`.`user_roles` (`id_rol`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -241,8 +230,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`RelAsAl` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
