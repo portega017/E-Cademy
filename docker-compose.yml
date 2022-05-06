@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mysqldb:
+    image: yobasystems/alpine-mariadb:latest
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=prueba@1A
+      - MYSQL_PASSWORD=prueba@1A
+      - MYSQL_DATABASE=academia
+      - MYSQL_USER=adminacad
+      
+  app:
+    depends_on:
+      - mysqldb
+    build: ./
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=adminacad
+      - DB_PASSWORD=prueba@1A
+      - DB_NAME=academia
+      - DB_PORT=3306
+    stdin_open: true
+    tty: true
+    
+volumes: 
+  db:
