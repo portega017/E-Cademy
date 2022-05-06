@@ -29,13 +29,15 @@
                         <div class="form-group">
                             <input type="email" class="form-control" placeholder="Email" name="Correo" required="true">
                         </div>
-                        
-                            <select class="form-select" id="asignatura" name="Asignatura" multiple="multiple" required="true">
-                                {{#each Asignatura}}
-                                <option value="{{idAsignatura}}">{{Nombre}}</option>
-                                {{/each}}
-                            </select>
-                        
+                        <b>Asignaturas:</b>
+                        <div class="form-group" id="asignatura" multiple="multiple"
+                            required="true">
+                            {{#each Asignatura}}
+                            <input type="checkbox" value="{{idAsignatura}}" name="Asignatura" /> {{Nombre}} 
+                            <br/>
+                            {{/each}}
+                        </div>
+
                         <div class="form-group">
                             <button class="submit">
                                 Enviar

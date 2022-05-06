@@ -42,7 +42,7 @@ router.get('/students', isLoggedIn, isAdmin, async (req, res, next) => {
 
       for (var k = 0; k < Asignatura.length; k++) {
         if (Alumno[i].idAlumno == Rel[j].idAlumno) {
-          if(Asignatura[k].idAsignatura==Rel[j].idAsignatura){
+          if (Asignatura[k].idAsignatura == Rel[j].idAsignatura) {
             asig.push(Asignatura[k].Nombre)
 
           }
@@ -114,13 +114,14 @@ router.get('/deleteAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
 router.get('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   const Alumno = await pool.query('SELECT * FROM Alumno WHERE idAlumno = ?', [id]);
-  res.render('admin/editAlumno', { title: 'Editar Alumno', Alumno: Alumno[0] })
+  const Asignaturas = await pool.query('SELECT * FROM Asignatura')
+  res.render('admin/editAlumno', { title: 'Editar Alumno', Alumno: Alumno[0], Asignatura: Asignaturas })
 
 });
 
 router.post('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
-  const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo } = req.body;
+  const { Nombre, Apellidos, DNI, Direccion, Telefono, Correo, Asignatura } = req.body;
   const newAlumno = {
     Nombre,
     Apellidos,
@@ -130,6 +131,20 @@ router.post('/editAlumno/:id', isLoggedIn, isAdmin, async (req, res) => {
     Correo
   };
   await pool.query('UPDATE Alumno SET ? WHERE idAlumno = ?', [newAlumno, id]);
+  const idAl = await pool.query('SELECT idAlumno FROM Alumno WHERE DNI = ?', [newAlumno.DNI]);
+  const allRel = await pool.query('SELECT * FROM RelAsAl')
+  for (var i = 0; i < Asignatura.length; i++) {
+    const idAlumno = idAl[0].idAlumno
+
+    const idAsignatura = parseInt(Asignatura[i])
+    const Rel = {
+      idAlumno,
+      idAsignatura
+    }
+    if (Rel.idAsignatura != allRel[i].idAsignatura) {
+      await pool.query('INSERT INTO RelAsAl SET ?', [Rel])
+    }
+  }
   req.flash('success', 'Alumno editado correctamente');
 
   res.redirect('/administration/students')
