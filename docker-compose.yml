@@ -15,6 +15,7 @@ services:
       - MYSQL_USER=adminacad
       
   app:
+    image: pibol/ecademy:latest
     depends_on:
       - mysqldb
     build: ./
