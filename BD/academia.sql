@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Alumno` (
   `DNI` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idAlumno`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 19
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
   `DNI` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idProfesor`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `academia`.`Asignatura` (
     FOREIGN KEY (`idProfesor`)
     REFERENCES `academia`.`Profesor` (`idProfesor`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -141,6 +141,25 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
+-- Table `academia`.`RelAsAl`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `academia`.`RelAsAl` (
+  `idAlumno` INT NOT NULL,
+  `idAsignatura` INT NOT NULL,
+  PRIMARY KEY (`idAlumno`, `idAsignatura`),
+  INDEX `fk_Alumno_has_Asignatura_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
+  INDEX `fk_Alumno_has_Asignatura_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
+  CONSTRAINT `fk_Alumno_has_Asignatura_Alumno1`
+    FOREIGN KEY (`idAlumno`)
+    REFERENCES `academia`.`Alumno` (`idAlumno`),
+  CONSTRAINT `fk_Alumno_has_Asignatura_Asignatura1`
+    FOREIGN KEY (`idAsignatura`)
+    REFERENCES `academia`.`Asignatura` (`idAsignatura`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
 -- Table `academia`.`horario_profesor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`horario_profesor` (
@@ -162,18 +181,6 @@ CREATE TABLE IF NOT EXISTS `academia`.`horario_profesor` (
   CONSTRAINT `fk_horario_profesor_Profesor1`
     FOREIGN KEY (`idProfesor`)
     REFERENCES `academia`.`Profesor` (`idProfesor`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
-
-
--- -----------------------------------------------------
--- Table `academia`.`sessions`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `academia`.`sessions` (
-  `session_id` VARCHAR(128) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_bin' NOT NULL,
-  `expires` INT UNSIGNED NOT NULL,
-  `data` MEDIUMTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_bin' NULL DEFAULT NULL,
-  PRIMARY KEY (`session_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -211,26 +218,21 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `academia`.`RelAsAl`
+-- Table `academia`.`Files`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `academia`.`RelAsAl` (
-  `idAlumno` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `academia`.`Files` (
+  `idFiles` INT NOT NULL AUTO_INCREMENT,
   `idAsignatura` INT NOT NULL,
-  PRIMARY KEY (`idAlumno`, `idAsignatura`),
-  INDEX `fk_Alumno_has_Asignatura_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
-  INDEX `fk_Alumno_has_Asignatura_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
-  CONSTRAINT `fk_Alumno_has_Asignatura_Alumno1`
-    FOREIGN KEY (`idAlumno`)
-    REFERENCES `academia`.`Alumno` (`idAlumno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Alumno_has_Asignatura_Asignatura1`
+  `uploadPath` VARCHAR(400) NOT NULL,
+  `Nombre` VARCHAR(400) NOT NULL,
+  PRIMARY KEY (`idFiles`),
+  INDEX `fk_Files_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
+  CONSTRAINT `fk_Files_Asignatura1`
     FOREIGN KEY (`idAsignatura`)
     REFERENCES `academia`.`Asignatura` (`idAsignatura`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
