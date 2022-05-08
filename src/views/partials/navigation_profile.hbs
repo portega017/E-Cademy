@@ -19,7 +19,7 @@
           <a class="nav-link active" aria-current="page" href="/administration"><i class="fas fa-user"></i> Admin</a>
         </li>
         {{/compare}}
-        
+
         {{!-- <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>
@@ -27,7 +27,7 @@
         <li class="nav-item">
           <a class="nav-link disabled">Disabled</a>
         </li> --}}
-        
+
       </ul>
 
 
@@ -38,8 +38,10 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><a class="dropdown-item" href="/profile.html"> <i class="fas fa-user"></i> Mi Perfil</a></li>
+          {{#compare user.id_rol '!=' 1}}
 
           <li><a class="dropdown-item" href="/courses">Mis Cursos</a></li>
+          {{/compare}}
           <li>
             <hr class="dropdown-divider">
           </li>

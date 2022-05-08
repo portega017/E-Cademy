@@ -1,8 +1,20 @@
-
-
-
-
 {{#each Asignatura}}
 <h1 style="color: white;">{{Nombre}}</h1>
 
+
+
+{{#compare Rol '==' 2}}
+<!--Código de Profesor-->
+<a href="/teacher/fileUpload/{{idAsignatura}}" style="color: white;">Subir archivos</a>
+
+{{else}}
+<!--Código de Alumno-->
+
+{{/compare}}
+{{#each Files}}
+<br />
+
+<a href="/courses/file/{{idFiles}}" >{{Nombre}}</a>
+
+{{/each}}
 {{/each}}
