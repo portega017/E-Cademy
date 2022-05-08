@@ -3,10 +3,12 @@ const router = express.Router();
 const pool = require('../database')
 const { isLoggedIn } = require('../lib/auth');
 const { isNotLoggedIn } = require('../lib/auth');
+const { isNotAdmin } = require('../lib/auth');
+
 const helpers = require('../lib/helpers');
 const path = require('path');
 
-router.get('/file/:id', async(req, res) =>{
+router.get('/file/:id',isLoggedIn,isNotAdmin, async(req, res) =>{
     const {id}=req.params;
     file=await pool.query('SELECT * FROM Files WHERE idFiles = ?',[id])
     fich=path.join(file[0].uploadPath)
