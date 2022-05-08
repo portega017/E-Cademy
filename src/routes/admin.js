@@ -295,6 +295,9 @@ router.get('/asignaturas', isLoggedIn, isAdmin, async (req, res, next) => {
 router.get('/deleteAsignatura/:id', isLoggedIn, isAdmin, async (req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM Asignatura WHERE idAsignatura = ?', [id]);
+  await pool.query('DELETE FROM Files WHERE idAsignatura = ?', [id]);
+  await pool.query('DELETE FROM RelAsAl WHERE idAsignatura = ?', [id]);
+
   req.flash('success', 'Asignatura eliminada correctamente');
 
   res.redirect('/administration/asignaturas');

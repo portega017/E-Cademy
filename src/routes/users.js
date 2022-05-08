@@ -14,7 +14,12 @@ router.get('/edit', isLoggedIn, (req, res) => {
 router.get('/courses', isLoggedIn, async (req, res) => {
     if (req.user.id_rol == 1) {
         res.redirect('/administration')
-    } else {
+    } else if (req.user.id_rol == 2) {
+        const Profesor = await pool.query('SELECT * FROM Profesor WHERE DNI=?', [req.user.DNI]);
+        const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE idProfesor = ?',[Profesor[0].idProfesor]);
+        
+        res.render('user/courses', { title: 'Mis Cursos', Asignatura: Asignatura });
+    } else if (req.user.id_rol == 3) {
         const Alumno = await pool.query('SELECT * FROM Alumno WHERE DNI=?', [req.user.DNI]);
         const profesor = await pool.query('SELECT * FROM Profesor')
         const Asignatura = await pool.query('SELECT * FROM Asignatura');
