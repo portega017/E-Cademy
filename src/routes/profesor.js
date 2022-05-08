@@ -22,9 +22,7 @@ router.get('/fileUpload/:id', isTeacher, (req, res) => {
 
 router.get('/deleteFile/:id', isTeacher, async (req, res) => {
   const { id } = req.params;
-  console.log(id)
   const File = await pool.query('SELECT * FROM Files WHERE idFiles=?', [id])
-  console.log(File[0].uploadPath)
   fs.unlink(File[0].uploadPath, function (err) {
     if (err) throw err;
     // if no error, file has been deleted successfully
@@ -38,7 +36,7 @@ router.get('/deleteFile/:id', isTeacher, async (req, res) => {
 })
 
 
-router.post('/upload/:id', async (req, res) => {
+router.post('/upload/:id', isTeacher,async (req, res) => {
   let file;
   let uploadPath;
   const { id } = req.params;
@@ -57,7 +55,6 @@ router.post('/upload/:id', async (req, res) => {
     uploadPath,
     Nombre
   }
-  console.log(newFile)
   await pool.query('INSERT INTO Files SET ?', [newFile])
 
   // Use the mv() method to place the file somewhere on your server
@@ -65,13 +62,62 @@ router.post('/upload/:id', async (req, res) => {
     if (err)
       return res.status(500).send(err);
 
-    console.log(file.mimetype);
-    //res.send('File uploaded!');
     res.send(file.ext);
-    //    res.redirect('/teacher/fileUpload');
 
   });
 
   res.redirect('/courses/' + id);
+});
+
+
+router.get('/editFile/:id', isLoggedIn, isTeacher, async (req, res) => {
+  const { id } = req.params;
+  const File = await pool.query('SELECT * FROM Files WHERE idFiles = ?', [id]);
+
+  res.render('profesor/editFile.hbs', { title: 'Editar Fichero', File: File[0] })
+
+
+});
+
+
+
+router.post('/edit/:id',isTeacher, async (req, res) => {
+  let file;
+  let uploadPath;
+  const { id } = req.params;
+  const { Nombre } = req.body;
+  console.log(id)
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  file = req.files.myFile;//myFile es el nombre que ponemos en el formulario en fileUpload.ejs
+  uploadPath = path.join(__dirname, '../public/files/documentos/') + file.name;
+  const File=await pool.query('SELECT * FROM Files WHERE idFiles=?',[id])
+  fs.unlink(File[0].uploadPath, function (err) {
+    if (err) throw err;
+    // if no error, file has been deleted successfully
+    console.log('File deleted!');
+  });
+  idAsignatura=File[0].idAsignatura
+  const newFile = {
+    idAsignatura,
+    uploadPath,
+    Nombre
+  }
+  
+  await pool.query('UPDATE Files SET ? WHERE idFiles = ?', [newFile, id]);
+
+
+  // Use the mv() method to place the file somewhere on your server
+  file.mv(uploadPath, function (err) {
+    if (err)
+      return res.status(500).send(err);
+
+    res.send(file.ext);
+
+  });
+
+  res.redirect('/courses/' + idAsignatura);
 });
 module.exports = router;
