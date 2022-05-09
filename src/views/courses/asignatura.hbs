@@ -6,17 +6,23 @@
 {{#compare Rol '==' 2}}
 <!--Código de Profesor-->
 <a href="/teacher/fileUpload/{{idAsignatura}}" style="color: white;">Subir archivos</a>
-
-{{else}}
-<!--Código de Alumno-->
-
-{{/compare}}
 {{#each Files}}
 <br />
-
 <a href="/courses/file/{{idFiles}}" >{{Nombre}}</a>
 <a href="/teacher/editFile/{{idFiles}}" style="color: black;">Editar</a>
 <a href="/teacher/deleteFile/{{idFiles}}" style="color: black;">Eliminar</a>
 
 {{/each}}
+{{else}}
+<!--Código de Alumno-->
+{{#each Files}}
+<br />
+
+
+
+<a href="/courses/file/{{idFiles}}" >{{Nombre}}</a>
+
+{{/each}}
+{{/compare}}
+
 {{/each}}

@@ -22,15 +22,10 @@ router.get('/:id', isLoggedIn, async (req, res) => {
     const Asignatura = await pool.query('SELECT * FROM Asignatura WHERE idAsignatura = ?', [id])
     const Files = await pool.query('SELECT * FROM Files WHERE idAsignatura = ?',[id])
 
-    if (await helpers.isTeacher(req.user.id_rol)) {//Profesor
+    if (await helpers.isNotAdmin(req.user.id_rol)) {//Profesor
         Asignatura[0].Rol=Usuario[0].id_rol
         Asignatura[0].Files=Files
 
-        res.render('courses/asignatura', { title: Asignatura[0].Nombre, Asignatura: Asignatura});
-    }else if(await helpers.isStudent(req.user.id_rol)){ //Alumno
-        Asignatura[0].Rol=Usuario[0].id_rol
-        Asignatura[0].Files=Files
-        console.log(Asignatura[0].Files)
         res.render('courses/asignatura', { title: Asignatura[0].Nombre, Asignatura: Asignatura});
     }else if(await helpers.isAdmin(req.user.id_rol)){
         return res.redirect('/administration');
