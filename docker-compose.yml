@@ -31,6 +31,7 @@ services:
       - DB_PORT=3306
     stdin_open: true
     tty: true
-    
+    volumes:
+      - /home/pibol/files:/home/node/app/src/public/files/documentos/
 volumes: 
   db:
