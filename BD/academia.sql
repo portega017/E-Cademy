@@ -244,3 +244,4 @@ insert into user_roles (id_rol, rol) values (3, 'alumno');
 insert into users (idusers, username, password, DNI, id_rol, fullname) values (1, 'pibol','$2a$10$dEJbgghoPtfqlEC48mJNmuQZXR.vSn5HZgZD9wkWzHpZUTGA6LY2i', '16094053X', 1, 'Pablo');
 
 
+grant all privileges on academia.* to 'adminacad'@'172.18.0.2' identified by 'prueba@1A';

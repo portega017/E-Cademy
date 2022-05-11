@@ -1,3 +1,6 @@
+#!/bin/bash
+mkdir E-Cademy
+cat >> E-Cademy/docker-compose.yml << EOF
 version: '3.8'
 services:
   mysqldb:
@@ -9,7 +12,7 @@ services:
     ports:
       - 192.168.1.14:3306:3306
     networks:
-      ecademy_network:
+      network:
         ipv4_address: 172.18.0.3
 
     environment:
@@ -28,7 +31,7 @@ services:
     ports:
       - 3000:3000
     networks:
-      ecademy_network:
+      network:
         ipv4_address: 172.18.0.2
     environment:
       - DB_HOST=mysqldb
@@ -43,7 +46,13 @@ services:
 volumes: 
   db:
 networks:
-    ecademy_network:
+    network:
         ipam:
           config:
             - subnet: "172.18.0.0/16"
+
+EOF
+cd E-Cademy
+docker-compose up -d
+docker cp e-cademy_app_1:/home/node/app/BD/academia.sql /home/
+docker cp /home/academia.sql e-cademy__mysqldb_1:/
