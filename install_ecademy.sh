@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir ~/files
 mkdir E-Cademy
 cat >> E-Cademy/docker-compose.yml << EOF
 version: '3.8'
@@ -10,7 +11,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     ports:
-      - 192.168.1.14:3306:3306
+      - 3306:3306
     networks:
       network:
         ipv4_address: 172.18.0.3
@@ -42,7 +43,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - /home/pibol/files:/home/node/app/src/public/files/documentos/
+      - /files:/home/node/app/src/public/files/documentos/
 volumes: 
   db:
 networks:
@@ -54,5 +55,5 @@ networks:
 EOF
 cd E-Cademy
 docker-compose up -d
-docker cp e-cademy_app_1:/home/node/app/BD/academia.sql /home/
-docker cp /home/academia.sql e-cademy__mysqldb_1:/
+docker cp e-cademy_app_1:/home/node/app/BD/academia.sql ~/
+docker cp ~/academia.sql e-cademy__mysqldb_1:/
