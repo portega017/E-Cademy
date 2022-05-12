@@ -56,4 +56,4 @@ EOF
 cd E-Cademy
 docker-compose up -d
 docker cp e-cademy_app_1:/home/node/app/BD/academia.sql ~/
-docker cp ~/academia.sql e-cademy__mysqldb_1:/
+docker cp ~/academia.sql e-cademy_mysqldb_1:/
