@@ -15,14 +15,14 @@ DROP SCHEMA IF EXISTS `academia` ;
 -- -----------------------------------------------------
 -- Schema academia
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `academia` DEFAULT CHARACTER SET utf8mb4;
+CREATE SCHEMA IF NOT EXISTS `academia` DEFAULT CHARACTER SET utf8mb4 ;
 USE `academia` ;
 
 -- -----------------------------------------------------
 -- Table `academia`.`Alumno`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Alumno` (
-  `idAlumno` INT NOT NULL AUTO_INCREMENT,
+  `idAlumno` INT(11) NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Apellidos` VARCHAR(45) NOT NULL,
   `Direccion` VARCHAR(45) NOT NULL,
@@ -39,7 +39,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`Profesor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Profesor` (
-  `idProfesor` INT NOT NULL AUTO_INCREMENT,
+  `idProfesor` INT(11) NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Apellidos` VARCHAR(45) NOT NULL,
   `Dirección` VARCHAR(45) NOT NULL,
@@ -56,10 +56,10 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`Asignatura`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Asignatura` (
-  `idAsignatura` INT NOT NULL AUTO_INCREMENT,
+  `idAsignatura` INT(11) NOT NULL AUTO_INCREMENT,
   `Codigo` VARCHAR(45) NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
-  `idProfesor` INT NOT NULL,
+  `idProfesor` INT(11) NOT NULL,
   PRIMARY KEY (`idAsignatura`),
   INDEX `fk_Asignatura_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
   CONSTRAINT `fk_Asignatura_Profesor1`
@@ -74,7 +74,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`Grupo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Grupo` (
-  `idGrupo` INT NOT NULL AUTO_INCREMENT,
+  `idGrupo` INT(11) NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Capacidad` VARCHAR(45) NOT NULL,
   `Turno` VARCHAR(45) NOT NULL,
@@ -87,9 +87,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`Aula`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Aula` (
-  `idAula` INT NOT NULL AUTO_INCREMENT,
+  `idAula` INT(11) NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
-  `Grupo_idGrupo` INT NOT NULL,
+  `Grupo_idGrupo` INT(11) NOT NULL,
   PRIMARY KEY (`idAula`),
   INDEX `fk_Aula_Grupo1_idx` (`Grupo_idGrupo` ASC) VISIBLE,
   CONSTRAINT `fk_Aula_Grupo1`
@@ -100,12 +100,31 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
+-- Table `academia`.`Files`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `academia`.`Files` (
+  `idFiles` INT(11) NOT NULL AUTO_INCREMENT,
+  `idAsignatura` INT(11) NOT NULL,
+  `uploadPath` VARCHAR(400) NOT NULL,
+  `Nombre` VARCHAR(400) NOT NULL,
+  PRIMARY KEY (`idFiles`),
+  INDEX `fk_Files_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
+  CONSTRAINT `fk_Files_Asignatura1`
+    FOREIGN KEY (`idAsignatura`)
+    REFERENCES `academia`.`Asignatura` (`idAsignatura`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
 -- Table `academia`.`Horario_Alumno`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Horario_Alumno` (
-  `idHorario_Alumno` INT NOT NULL AUTO_INCREMENT,
-  `idAsignatura` INT NOT NULL,
-  `idAlumno` INT NOT NULL,
+  `idHorario_Alumno` INT(11) NOT NULL AUTO_INCREMENT,
+  `idAsignatura` INT(11) NOT NULL,
+  `idAlumno` INT(11) NOT NULL,
   `Dia` VARCHAR(45) NOT NULL,
   `Hora_inicio` TIME NOT NULL,
   `Hora_fin` TIME NOT NULL,
@@ -126,11 +145,11 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`Pagos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`Pagos` (
-  `idPagos` INT NOT NULL AUTO_INCREMENT,
+  `idPagos` INT(11) NOT NULL AUTO_INCREMENT,
   `concepto` VARCHAR(45) NOT NULL,
   `importe` DOUBLE NOT NULL,
   `fecha_pago` DATETIME NOT NULL,
-  `Alumno_idAlumno` INT NOT NULL,
+  `Alumno_idAlumno` INT(11) NOT NULL,
   PRIMARY KEY (`idPagos`),
   INDEX `fk_Pagos_Alumno1_idx` (`Alumno_idAlumno` ASC) VISIBLE,
   CONSTRAINT `fk_Pagos_Alumno1`
@@ -144,8 +163,8 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`RelAsAl`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`RelAsAl` (
-  `idAlumno` INT NOT NULL,
-  `idAsignatura` INT NOT NULL,
+  `idAlumno` INT(11) NOT NULL,
+  `idAsignatura` INT(11) NOT NULL,
   PRIMARY KEY (`idAlumno`, `idAsignatura`),
   INDEX `fk_Alumno_has_Asignatura_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
   INDEX `fk_Alumno_has_Asignatura_Alumno1_idx` (`idAlumno` ASC) VISIBLE,
@@ -163,12 +182,12 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`horario_profesor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`horario_profesor` (
-  `idProfesor` INT NOT NULL,
-  `idAsignatura` INT NOT NULL,
+  `idProfesor` INT(11) NOT NULL,
+  `idAsignatura` INT(11) NOT NULL,
   `Dia` VARCHAR(45) NOT NULL,
   `hora_inicio` TIME NOT NULL,
   `hora_fin` TIME NOT NULL,
-  `Grupo_idGrupo` INT NOT NULL,
+  `Grupo_idGrupo` INT(11) NOT NULL,
   INDEX `fk_horario_profesor_Profesor1_idx` (`idProfesor` ASC) VISIBLE,
   INDEX `fk_horario_profesor_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
   INDEX `fk_horario_profesor_Grupo1_idx` (`Grupo_idGrupo` ASC) VISIBLE,
@@ -186,10 +205,22 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
+-- Table `academia`.`sessions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `academia`.`sessions` (
+  `session_id` VARCHAR(128) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_bin' NOT NULL,
+  `expires` INT(11) UNSIGNED NOT NULL,
+  `data` MEDIUMTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_bin' NULL DEFAULT NULL,
+  PRIMARY KEY (`session_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
 -- Table `academia`.`user_roles`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`user_roles` (
-  `id_rol` INT NOT NULL AUTO_INCREMENT,
+  `id_rol` INT(11) NOT NULL AUTO_INCREMENT,
   `rol` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_rol`))
 ENGINE = InnoDB
@@ -201,11 +232,11 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `academia`.`users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `academia`.`users` (
-  `idusers` INT NOT NULL AUTO_INCREMENT,
+  `idusers` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(60) NOT NULL,
   `DNI` VARCHAR(45) NOT NULL,
-  `id_rol` INT NOT NULL,
+  `id_rol` INT(11) NOT NULL,
   `fullname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idusers`),
   INDEX `fk_users_user_roles1_idx` (`id_rol` ASC) VISIBLE,
@@ -217,27 +248,10 @@ AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4;
 
 
--- -----------------------------------------------------
--- Table `academia`.`Files`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `academia`.`Files` (
-  `idFiles` INT NOT NULL AUTO_INCREMENT,
-  `idAsignatura` INT NOT NULL,
-  `uploadPath` VARCHAR(400) NOT NULL,
-  `Nombre` VARCHAR(400) NOT NULL,
-  PRIMARY KEY (`idFiles`),
-  INDEX `fk_Files_Asignatura1_idx` (`idAsignatura` ASC) VISIBLE,
-  CONSTRAINT `fk_Files_Asignatura1`
-    FOREIGN KEY (`idAsignatura`)
-    REFERENCES `academia`.`Asignatura` (`idAsignatura`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 insert into user_roles (id_rol, rol) values (1, 'admin');
 insert into user_roles (id_rol, rol) values (2, 'profesor');
 insert into user_roles (id_rol, rol) values (3, 'alumno');
